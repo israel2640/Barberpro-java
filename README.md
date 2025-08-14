@@ -157,8 +157,7 @@ INSERT INTO servicos (nome, descricao, preco) VALUES
 ('Corte Degradê', 'Degradê gradual perfeito, moderno e estiloso.', 35.00),
 ('Corte Desenhado', 'Desenhos personalizados e criativos com precisão.', 40.00);
 
-***comados***
-Banco de dados
+
 SELECT * FROM barbeiros;
 SELECT * FROM agendamentos;
 DELETE FROM agendamentos WHERE id = 2;
