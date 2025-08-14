@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Admin | BarberPro</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <style>
+    /* Reset e Fontes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background-color: #0c0c0c;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding-top: 80px; /* Espaço para o menu fixo */
+    }
+
+    /* Navegação - Padrão Moderno e Minimalista */
+    nav {
+      width: 100%;
+      background-color: rgba(12, 12, 12, 0.8);
+      backdrop-filter: blur(5px);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    nav .logo {
+      color: #ff9900;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: #a0a0a0;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul li a:hover {
+      color: #ff9900;
+    }
+
+    nav ul li a i {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+
+    /* Títulos da Página */
+    .page-title {
+      font-size: 2.5rem;
+      color: #ff9900;
+      margin: 40px 0 20px;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    .subtitle {
+        font-size: 1.8rem;
+        color: #e0e0e0;
+        margin: 40px 0 20px;
+        text-align: center;
+        font-weight: 400;
+    }
+
+    /* Layout do Container Principal */
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto 50px;
+        padding: 0 20px;
+    }
+    
+    /* Tabelas e Listas */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 50px;
+        background-color: #1a1a1a;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #333;
+    }
+    
+    th {
+        background-color: #ff9900;
+        color: #0c0c0c;
+        font-weight: 600;
+    }
+    
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border-radius: 50px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      font-size: 0.9rem;
+      margin: 2px;
+    }
+
+    .btn-adicionar { background-color: #4CAF50; color: white; }
+    .btn-adicionar:hover { background-color: #45a049; transform: scale(1.05); }
+
+    .btn-editar { background-color: #2196F3; color: white; }
+    .btn-editar:hover { background-color: #0b7dda; transform: scale(1.05); }
+
+    .btn-excluir { background-color: #f44336; color: white; }
+    .btn-excluir:hover { background-color: #da190b; transform: scale(1.05); }
+
+    /* Formulários de CRUD */
+    .form-container {
+        background: #1a1a1a;
+        padding: 30px;
+        border-radius: 15px;
+        margin: 0 auto 40px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        max-width: 600px;
+        text-align: left;
+    }
+    
+    .form-container h3 {
+        color: #ff9900;
+        margin-bottom: 20px;
+    }
+
+    .form-container input, .form-container button {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        border: 1px solid #333;
+        background-color: #222;
+        color: #e0e0e0;
+        font-size: 1rem;
+    }
+    
+    /* Rodapé */
+    footer {
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      padding: 20px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">BarberPro</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="agendamento.html">Agendamento</a></li>
+      <li><a href="barbeiros.html">Barbeiros</a></li>
+      <li><a href="produtos.HTML">Produtos</a></li>
+      <li><a href="localização.HTML">Localização</a></li>
+      <li><a href="admin.html" title="Painel Admin"><i class="fas fa-cog"></i> Admin</a></li>
+      <li><a href="#" id="logout-btn" title="Sair"><i class="fas fa-sign-out-alt"></i></a></li>
+    </ul>
+  </nav>
+
+  <div class="admin-container">
+    <h1 class="page-title">Painel de Administração</h1>
+
+    <h2 class="subtitle">Agendamentos</h2>
+    <table id="tabela-agendamentos">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Barbeiro</th>
+          <th>Serviço</th>
+          <th>Preço</th>
+          <th>Data</th>
+          <th>Hora</th>
+        </tr>
+      </thead>
+      <tbody>
+        </tbody>
+    </table>
+
+    <h2 class="subtitle">Gerenciar Usuários</h2>
+    <div class="form-container">
+        <h3>Adicionar/Editar Usuário</h3>
+        <form id="form-usuario">
+            <input type="hidden" id="usuario-id">
+            <input type="text" id="usuario-nome" placeholder="Nome do usuário" required>
+            <input type="email" id="usuario-email" placeholder="Email do usuário" required>
+            <input type="password" id="usuario-senha" placeholder="Senha (apenas para novos usuários)">
+            <button type="submit" class="btn btn-adicionar">Salvar Usuário</button>
+        </form>
+    </div>
+    <table id="tabela-usuarios">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        </tbody>
+    </table>
+
+    <h2 class="subtitle">Gerenciar Barbeiros</h2>
+    <div class="form-container">
+        <h3>Adicionar/Editar Barbeiro</h3>
+        <form id="form-barbeiro">
+            <input type="hidden" id="barbeiro-id">
+            <input type="text" id="barbeiro-nome" placeholder="Nome do barbeiro" required>
+            <input type="email" id="barbeiro-email" placeholder="Email do barbeiro" required>
+            <button type="submit" class="btn btn-adicionar">Salvar Barbeiro</button>
+        </form>
+    </div>
+    <table id="tabela-barbeiros">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        </tbody>
+    </table>
+  </div>
+  
+  <footer>
+    &copy; 2025 BarberPro - Todos os direitos reservados.
+  </footer>
+
+<script>
+  // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
+  // API URL e token são placeholders. Você deve configurar de acordo com seu backend.
+  const API_URL = "http://localhost:8080";
+  const adminToken = localStorage.getItem('jwt_admin_token'); // Exemplo de token de administrador
+
+  const tabelaAgendamentos = document.getElementById('tabela-agendamentos').getElementsByTagName('tbody')[0];
+  const tabelaUsuarios = document.getElementById('tabela-usuarios').getElementsByTagName('tbody')[0];
+  const tabelaBarbeiros = document.getElementById('tabela-barbeiros').getElementsByTagName('tbody')[0];
+  
+  const formUsuario = document.getElementById('form-usuario');
+  const formBarbeiro = document.getElementById('form-barbeiro');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  // --- LÓGICA DA APLICAÇÃO ---
+
+  // 1. VERIFICAR SE O ADMIN ESTÁ LOGADO
+  function verificarLoginAdmin() {
+    if (!adminToken) {
+      alert('Acesso negado. Por favor, faça o login como administrador.');
+      window.location.href = 'login-admin.html'; // Exemplo de página de login para admin
+    }
+  }
+  
+  // 2. CARREGAR DADOS INICIAIS
+  window.onload = () => {
+    verificarLoginAdmin();
+    carregarAgendamentos();
+    carregarUsuarios();
+    carregarBarbeiros();
+  };
+
+  // --- FUNÇÕES DE CARREGAMENTO (READ) ---
+  async function carregarAgendamentos() {
+    try {
+      const response = await fetch(`${API_URL}/admin/agendamentos`, {
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      const agendamentos = await response.json();
+      tabelaAgendamentos.innerHTML = '';
+      agendamentos.forEach(ag => {
+        const row = tabelaAgendamentos.insertRow();
+        row.innerHTML = `
+          <td>${ag.nomeCliente}</td>
+          <td>${ag.nomeBarbeiro}</td>
+          <td>${ag.nomeServico}</td>
+          <td>R$ ${ag.preco.toFixed(2)}</td>
+          <td>${new Date(ag.dataHora).toLocaleDateString('pt-BR')}</td>
+          <td>${new Date(ag.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</td>
+        `;
+      });
+    } catch (error) {
+      console.error('Erro ao carregar agendamentos:', error);
+    }
+  }
+
+  async function carregarUsuarios() {
+    try {
+      const response = await fetch(`${API_URL}/admin/usuarios`, {
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      const usuarios = await response.json();
+      tabelaUsuarios.innerHTML = '';
+      usuarios.forEach(user => {
+        const row = tabelaUsuarios.insertRow();
+        row.innerHTML = `
+          <td>${user.id}</td>
+          <td>${user.nome}</td>
+          <td>${user.email}</td>
+          <td>
+            <button class="btn btn-editar" onclick="preencherFormUsuario(${user.id}, '${user.nome}', '${user.email}')">Editar</button>
+            <button class="btn btn-excluir" onclick="excluirUsuario(${user.id})">Excluir</button>
+          </td>
+        `;
+      });
+    } catch (error) {
+      console.error('Erro ao carregar usuários:', error);
+    }
+  }
+
+  async function carregarBarbeiros() {
+    try {
+      const response = await fetch(`${API_URL}/admin/barbeiros`, {
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      const barbeiros = await response.json();
+      tabelaBarbeiros.innerHTML = '';
+      barbeiros.forEach(barb => {
+        const row = tabelaBarbeiros.insertRow();
+        row.innerHTML = `
+          <td>${barb.id}</td>
+          <td>${barb.nome}</td>
+          <td>${barb.email}</td>
+          <td>
+            <button class="btn btn-editar" onclick="preencherFormBarbeiro(${barb.id}, '${barb.nome}', '${barb.email}')">Editar</button>
+            <button class="btn btn-excluir" onclick="excluirBarbeiro(${barb.id})">Excluir</button>
+          </td>
+        `;
+      });
+    } catch (error) {
+      console.error('Erro ao carregar barbeiros:', error);
+    }
+  }
+
+  // --- FUNÇÕES DE CRUD (USUÁRIOS) ---
+  formUsuario.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('usuario-id').value;
+      const nome = document.getElementById('usuario-nome').value;
+      const email = document.getElementById('usuario-email').value;
+      const senha = document.getElementById('usuario-senha').value;
+      
+      const metodo = id ? 'PUT' : 'POST';
+      const url = id ? `${API_URL}/admin/usuarios/${id}` : `${API_URL}/admin/usuarios`;
+      
+      const dados = { nome, email };
+      if (senha) dados.senha = senha;
+
+      try {
+          const response = await fetch(url, {
+              method: metodo,
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+              body: JSON.stringify(dados)
+          });
+          if (response.ok) {
+              alert(`Usuário ${id ? 'atualizado' : 'adicionado'} com sucesso!`);
+              formUsuario.reset();
+              carregarUsuarios();
+          } else {
+              alert('Erro ao salvar usuário.');
+          }
+      } catch (error) {
+          console.error('Erro:', error);
+      }
+  });
+
+  function preencherFormUsuario(id, nome, email) {
+      document.getElementById('usuario-id').value = id;
+      document.getElementById('usuario-nome').value = nome;
+      document.getElementById('usuario-email').value = email;
+      document.getElementById('usuario-senha').placeholder = 'Deixe em branco para manter a senha atual';
+  }
+
+  async function excluirUsuario(id) {
+    if (!confirm('Tem certeza que deseja excluir este usuário?')) return;
+    try {
+      const response = await fetch(`${API_URL}/admin/usuarios/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      if (response.ok) {
+        alert('Usuário excluído com sucesso!');
+        carregarUsuarios();
+      } else {
+        alert('Erro ao excluir usuário.');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+    }
+  }
+
+  // --- FUNÇÕES DE CRUD (BARBEIROS) ---
+  formBarbeiro.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const id = document.getElementById('barbeiro-id').value;
+      const nome = document.getElementById('barbeiro-nome').value;
+      const email = document.getElementById('barbeiro-email').value;
+      
+      const metodo = id ? 'PUT' : 'POST';
+      const url = id ? `${API_URL}/admin/barbeiros/${id}` : `${API_URL}/admin/barbeiros`;
+      
+      const dados = { nome, email };
+
+      try {
+          const response = await fetch(url, {
+              method: metodo,
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+              body: JSON.stringify(dados)
+          });
+          if (response.ok) {
+              alert(`Barbeiro ${id ? 'atualizado' : 'adicionado'} com sucesso!`);
+              formBarbeiro.reset();
+              carregarBarbeiros();
+          } else {
+              alert('Erro ao salvar barbeiro.');
+          }
+      } catch (error) {
+          console.error('Erro:', error);
+      }
+  });
+
+  function preencherFormBarbeiro(id, nome, email) {
+      document.getElementById('barbeiro-id').value = id;
+      document.getElementById('barbeiro-nome').value = nome;
+      document.getElementById('barbeiro-email').value = email;
+  }
+
+  async function excluirBarbeiro(id) {
+    if (!confirm('Tem certeza que deseja excluir este barbeiro?')) return;
+    try {
+      const response = await fetch(`${API_URL}/admin/barbeiros/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      if (response.ok) {
+        alert('Barbeiro excluído com sucesso!');
+        carregarBarbeiros();
+      } else {
+        alert('Erro ao excluir barbeiro.');
+      }
+    } catch (error) {
+      console.error('Erro:', error);
+    }
+  }
+
+  // --- LOGOUT ---
+  logoutBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('jwt_admin_token');
+    alert('Você foi desconectado do painel administrativo.');
+    window.location.href = 'login-admin.html';
+  });
+
+</script>
+
+</body>
+</html>
