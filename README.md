@@ -109,3 +109,60 @@ Certifique-se de que a variável API_URL nos arquivos JavaScript (agendamento.ht
 Exportar para as Planilhas
 🙏 Agradecimentos
 Agradecimentos ao professor [Vinicios] e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
+
+****Banco de dados***
+DROP DATABASE IF EXISTS barberpro_java_db;
+CREATE DATABASE barberpro_java_db;
+USE barberpro_java_db;
+
+CREATE TABLE `clientes` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(191) NOT NULL UNIQUE,
+  `senha` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `barbeiros` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `servicos` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(100) NOT NULL,
+  `descricao` VARCHAR(255) NULL,
+  `preco` DECIMAL(10, 2) NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `agendamentos` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT,
+  `data_hora` DATETIME NOT NULL,
+  `cliente_id` BIGINT NOT NULL,
+  `barbeiro_id` BIGINT NOT NULL,
+  `servico_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`cliente_id`) REFERENCES `clientes`(`id`),
+  FOREIGN KEY (`barbeiro_id`) REFERENCES `barbeiros`(`id`),
+  FOREIGN KEY (`servico_id`) REFERENCES `servicos`(`id`)
+);
+
+-- Insere os dados iniciais de barbeiros e serviços
+INSERT INTO barbeiros (nome) VALUES ('Belga'), ('Lucas');
+INSERT INTO servicos (nome, descricao, preco) VALUES
+('Corte Social', 'Corte tradicional, na tesoura e máquina, acabamento perfeito.', 25.00),
+('Corte Navalhado', 'Finalização com navalha para linhas mais precisas e definidas.', 30.00);
+
+***comados***
+Banco de dados
+SELECT * FROM barbeiros;
+SELECT * FROM agendamentos;
+DELETE FROM agendamentos WHERE id = 2;
+SELECT * FROM clientes;
+SELECT nome, email, senha FROM clientes;
+DELETE FROM clientes WHERE id IN (1, 2);
+USE barberpro_java_db;
+SELECT email FROM usuarios;
+DROP DATABASE barberpro_java_db;
