@@ -194,7 +194,7 @@
   async function carregarAgendamentosDoBarbeiro() {
     // Supondo que a API tem um endpoint para agendamentos do barbeiro logado.
     try {
-      const response = await fetch(`${API_URL}/barbeiros/agendamentos`, {
+      const response = await fetch(`${API_URL}/api/barbeiros/meus-agendamentos`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!response.ok) throw new Error('Erro ao buscar agendamentos.');
