@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BarberPro - Início</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif; /* Fonte moderna */
+    }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      background-color: #0c0c0c; /* Cor de fundo mais escura */
+      color: #e0e0e0; /* Cor de texto mais suave */
+      position: relative;
+    }
+
+    video#video-bg {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      opacity: 0.2; /* Opacidade reduzida */
+    }
+
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3.5rem; /* Fonte um pouco maior */
+      color: #ff9900; /* Laranja mais suave */
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #e0e0e0;
+      margin-bottom: 25px;
+      font-weight: 300;
+    }
+
+    p {
+      max-width: 600px;
+      font-size: 1rem;
+      color: #a0a0a0; /* Cinza mais claro */
+      margin-bottom: 40px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .btn {
+      background-color: transparent; /* Fundo transparente */
+      color: #ff9900;
+      border: 2px solid #ff9900; /* Borda laranja */
+      padding: 12px 30px;
+      font-size: 1rem;
+      border-radius: 50px; /* Borda arredondada */
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease; /* Transição mais suave */
+    }
+
+    .btn:hover {
+      background-color: #ff9900;
+      color: #0c0c0c;
+    }
+
+    .horario {
+      margin-top: 50px; /* Margem maior para separar */
+    }
+
+    .horario h2 {
+      font-size: 2rem;
+      color: #ff9900;
+      margin-bottom: 15px;
+    }
+
+    .horario-list {
+      display: inline-block;
+      text-align: left;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #e0e0e0;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+</style>
+</head>
+<body>
+
+  <video autoplay muted loop id="video-bg">
+    <source src="IMAGENS/2319-157183741_tiny.mp4" type="video/mp4">
+    Seu navegador não suporta vídeos HTML5.
+  </video>
+
+  <div class="container">
+    <h1>BarberPro</h1>
+    <h2>Estilo, Qualidade e Atendimento de Primeira</h2>
+    <p>
+      Bem-vindo à BarberPro, onde cada corte é feito com excelência. Nosso compromisso é oferecer um ambiente moderno, profissionais experientes e os melhores estilos para realçar a sua personalidade. Agende agora mesmo seu horário!
+    </p>
+    <a href="agendamento.html">
+      <button class="btn">Agendar Agora</button>
+    </a>
+
+    <div style="text-align: center; background-color: transparent; max-width: 600px; margin: 0 auto; margin-top: 30px;">
+      <h2 style="color: #FFA500; margin-bottom: 20px; font-size: 28px;">⏰ HORÁRIO DE FUNCIONAMENTO ⏰</h2>
+      <div style="display: inline-block; text-align: left; font-size: 18px; line-height: 1.6; color: #fff;">
+        <p style="margin: 10px 0;"><strong>Segunda a Sexta:</strong> 09:00 - 12:00 | 14:00 - 19:00</p>
+        <p style="margin: 10px 0;"><strong>Sábado:</strong> 09:00 - 13:00</p>
+        <p style="margin: 10px 0;"><strong>Domingo:</strong> Fechado</p>
+      </div>
+    </div>
+    
+  </div>
+
+  <footer>
+    &copy; 2025 BarberPro - Todos os direitos reservados.
+  </footer>
+
+</body>
+</html>

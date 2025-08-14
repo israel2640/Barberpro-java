@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendamentos | BarberPro</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <style>
+    /* Reset e Fontes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    body {
+      background-color: #0c0c0c;
+      color: #e0e0e0;
+      min-height: 100vh;
+      padding-top: 80px; /* Espaço para o menu fixo */
+    }
+
+    /* Navegação - Padrão Moderno e Minimalista */
+    nav {
+      width: 100%;
+      background-color: rgba(12, 12, 12, 0.8);
+      backdrop-filter: blur(5px);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    nav .logo {
+      color: #ff9900;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: #a0a0a0;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul li a:hover {
+      color: #ff9900;
+    }
+
+    nav ul li a i {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+
+    /* Títulos da Página */
+    .page-title {
+      font-size: 2.5rem;
+      color: #ff9900;
+      margin: 40px 0;
+      text-align: center;
+      font-weight: 500;
+    }
+    
+    /* Formulário de Agendamento */
+    form {
+      background: #1a1a1a;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    form div {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #a0a0a0;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background-color: #222;
+      color: #e0e0e0;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: #ff9900;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #ff9900;
+      background-color: transparent;
+      color: #ff9900;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+    
+    button[type="submit"]:hover {
+      background-color: #ff9900;
+      color: #0c0c0c;
+      transform: scale(1.02);
+    }
+    
+    /* Lista de Agendamentos */
+    .agendamentos-lista {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .agendamento-card {
+      background-color: #1a1a1a;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+    
+    .agendamento-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .agendamento-info p {
+        margin: 5px 0;
+        color: #a0a0a0;
+    }
+    
+    .agendamento-info strong {
+        color: #e0e0e0;
+    }
+    
+    .btn-remover {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    
+    .btn-remover:hover {
+      background-color: #c9302c;
+    }
+
+    /* Rodapé (Opcional, mas para consistência) */
+    footer {
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      padding: 20px 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">BarberPro</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="agendamento.html">Agendamento</a></li>
+      <li><a href="barbairo.html">Barbeiros</a></li>
+      <li><a href="produtos.HTML">Produtos</a></li>
+      <li><a href="localização.HTML">Localização</a></li>
+      <li><a href="registrar.html" title="Login/Registrar"><i class="fas fa-user"></i></a></li>
+      <li><a href="#" id="logout-btn" title="Sair"><i class="fas fa-sign-out-alt"></i></a></li>
+    </ul>
+  </nav>
+
+  <h2 class="page-title">Agendar Novo Horário</h2>
+
+  <form id="form-agendamento">
+    <div>
+      <label for="servico">Serviço:</label>
+      <select id="servico" required>
+        <option value="">Selecione um serviço...</option>
+      </select>
+    </div>
+    <div>
+      <label for="barbeiro">Barbeiro:</label>
+      <select id="barbeiro" required>
+        <option value="">Selecione um barbeiro...</option>
+      </select>
+    </div>
+    <div>
+      <label for="data">Data e Hora:</label>
+      <input type="datetime-local" id="data" required />
+    </div>
+    <button type="submit">Agendar</button>
+  </form>
+
+  <div class="agendamentos-lista">
+    <h2 class="page-title" style="margin-top: 0;">Meus Agendamentos</h2>
+    <div id="lista-agendamentos">
+    </div>
+  </div>
+
+<script>
+  // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
+  const API_URL = "http://localhost:8080";
+  const token = localStorage.getItem('jwt_token');
+
+  const form = document.getElementById('form-agendamento');
+  const selectBarbeiros = document.getElementById('barbeiro');
+  const selectServicos = document.getElementById('servico');
+  const divListaAgendamentos = document.getElementById('lista-agendamentos');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  // --- LÓGICA DA APLICAÇÃO ---
+
+  // 1. VERIFICAR SE O USUÁRIO ESTÁ LOGADO
+  function verificarLogin() {
+    if (!token) {
+      alert('Acesso negado. Por favor, faça o login.');
+      window.location.href = 'registrar.html';
+    }
+  }
+
+  // 2. CARREGAR (READ) E MOSTRAR AGENDAMENTOS DO CLIENTE
+  async function carregarAgendamentos() {
+    try {
+      const response = await fetch(`${API_URL}/agendamentos`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Erro ao buscar agendamentos.');
+      
+      const agendamentos = await response.json();
+      divListaAgendamentos.innerHTML = ''; 
+
+      if (agendamentos.length === 0) {
+        divListaAgendamentos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui agendamentos.</p>';
+        return;
+      }
+
+      agendamentos.forEach(ag => {
+        const dataFormatada = new Date(ag.dataHora).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const agendamentoHTML = `
+          <div class="agendamento-card">
+            <div class="agendamento-info">
+              <p><strong>Serviço:</strong> ${ag.nomeServico} com <strong>${ag.nomeBarbeiro}</strong></p>
+              <p><strong>Data:</strong> ${dataFormatada}</p>
+            </div>
+            <button class="btn-remover" data-id="${ag.id}">Remover</button>
+          </div>
+        `;
+        divListaAgendamentos.innerHTML += agendamentoHTML;
+      });
+
+    } catch (error) {
+      console.error(error);
+      divListaAgendamentos.innerHTML = '<p style="color:red; text-align:center;">Falha ao carregar agendamentos.</p>';
+    }
+  }
+
+  // 3. REMOVER (DELETE) UM AGENDAMENTO
+  divListaAgendamentos.addEventListener('click', async function(e) {
+    if (e.target.classList.contains('btn-remover')) {
+      const agendamentoId = e.target.dataset.id;
+      if (confirm('Tem certeza que deseja remover este agendamento?')) {
+        try {
+          const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+
+          if (response.ok) {
+            alert('Agendamento removido com sucesso!');
+            carregarAgendamentos();
+          } else {
+            alert('Erro ao remover o agendamento.');
+          }
+        } catch (error) {
+          console.error('Erro na remoção:', error);
+        }
+      }
+    }
+  });
+
+  // 4. CRIAR (CREATE) UM NOVO AGENDAMENTO
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const dadosAgendamento = {
+      idBarbeiro: selectBarbeiros.value,
+      idServico: selectServicos.value,
+      dataHora: document.getElementById("data").value
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/agendamentos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(dadosAgendamento)
+      });
+
+      if (response.ok) {
+        alert(`Agendamento realizado com sucesso!`);
+        form.reset();
+        carregarAgendamentos();
+      } else {
+        alert(`Erro ao agendar: Verifique se todos os campos foram preenchidos.`);
+      }
+    } catch (error) {
+      console.error('Erro na requisição:', error);
+    }
+  });
+
+  // 5. FAZER LOGOUT
+  logoutBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('jwt_token');
+    alert('Você foi desconectado.');
+    window.location.href = 'registrar.html';
+  });
+
+  // --- FUNÇÕES AUXILIARES PARA CARREGAR DROPDOWNS ---
+  async function carregarBarbeiros() {
+    try {
+      const response = await fetch(`${API_URL}/api/dados/barbeiros`);
+      if (!response.ok) throw new Error('Erro ao buscar barbeiros!');
+      const barbeiros = await response.json();
+      barbeiros.forEach(barbeiro => {
+        const option = document.createElement('option');
+        option.value = barbeiro.id;
+        option.textContent = barbeiro.nome;
+        selectBarbeiros.appendChild(option);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function carregarServicos() {
+    try {
+      const response = await fetch(`${API_URL}/api/dados/servicos`);
+      const servicos = await response.json();
+      servicos.forEach(servico => {
+        const option = document.createElement('option');
+        option.value = servico.id;
+        option.textContent = `${servico.nome} (R$ ${servico.preco.toFixed(2)})`;
+        selectServicos.appendChild(option);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // --- INICIALIZAÇÃO DA PÁGINA ---
+  window.onload = () => {
+    verificarLogin();
+    carregarAgendamentos();
+    carregarBarbeiros(); 
+    carregarServicos();
+  };
+</script>
+
+</body>
+</html>

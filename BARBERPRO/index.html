@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BarberPro - Início</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset e fontes */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #0c0c0c;
+      color: #e0e0e0;
+      position: relative;
+    }
+
+    /* Navegação */
+    nav {
+      width: 100%;
+      background-color: rgba(12, 12, 12, 0.8);
+      backdrop-filter: blur(5px);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    nav .logo {
+      color: #ff9900;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    nav ul li a {
+      color: #a0a0a0;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      font-weight: 400;
+      display: flex;
+      align-items: center;
+    }
+
+    nav ul li a:hover {
+      color: #ff9900;
+    }
+
+    nav ul li a i {
+      font-size: 1.2rem;
+      margin-right: 5px;
+    }
+
+    /* Vídeo de Fundo */
+    video#video-bg {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      opacity: 0.2;
+    }
+
+    /* Container Principal */
+    .container {
+      padding-top: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 50px;
+    }
+
+    /* Conteúdo Principal */
+    h1 {
+      font-size: 4rem;
+      color: #ff9900;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: #e0e0e0;
+      margin-bottom: 25px;
+      font-weight: 300;
+    }
+
+    .main-p {
+      max-width: 600px;
+      font-size: 1rem;
+      color: #a0a0a0;
+      margin-bottom: 50px;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .btn {
+      background-color: transparent;
+      color: #ff9900;
+      border: 2px solid #ff9900;
+      padding: 12px 40px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 60px;
+    }
+
+    .btn:hover {
+      background-color: #ff9900;
+      color: #0c0c0c;
+      transform: scale(1.05);
+    }
+
+    /* Seções (Serviços, Portfólio) */
+    .section-title {
+      text-align: center;
+      color: #ff9900;
+      margin: 80px 0 40px;
+      font-size: 2.5rem;
+      font-weight: 500;
+      border-bottom: 2px solid #ff9900;
+      padding-bottom: 10px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .services, .portfolio {
+      width: 100%;
+      max-width: 900px;
+      padding: 0 20px;
+      margin: 0 auto;
+    }
+
+    .services {
+      background-color: #1a1a1a;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .service {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #333;
+    }
+
+    /* Regra adicionada para centralizar o texto dos serviços */
+    .service > div:first-child {
+      text-align: center;
+    }
+
+    .service:last-child {
+      border-bottom: none;
+    }
+
+    .service-name {
+      font-size: 22px;
+      color: #ff9900;
+      font-weight: 500;
+    }
+
+    .service-description {
+      font-size: 15px;
+      color: #a0a0a0;
+      margin-top: 5px;
+    }
+
+    .service-price {
+      font-size: 20px;
+      color: #e0e0e0;
+      font-weight: 600;
+    }
+
+    .portfolio {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .portfolio-item {
+      background-color: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .portfolio-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .portfolio-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(255, 153, 0, 0.2);
+    }
+
+    .portfolio-item:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Horário de Funcionamento */
+    .horario-container {
+      text-align: center;
+      max-width: 600px;
+      margin: 80px auto 0;
+      padding-bottom: 50px;
+    }
+
+    .horario-container h2 {
+      color: #ff9900;
+      margin-bottom: 20px;
+      font-size: 2rem;
+      font-weight: 500;
+    }
+    
+    .horario-list {
+      display: inline-block;
+      text-align: left;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #a0a0a0;
+    }
+
+    /* Rodapé */
+    footer {
+      position: relative;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      padding: 20px 0;
+    }
+</style>
+</head>
+
+<body>
+  <nav>
+    <div class="logo">BarberPro</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="agendamento.html">Agendamento</a></li>
+      <li><a href="barbairo.html">Barbeiros</a></li>
+      <li><a href="produtos.HTML">Produtos</a></li>
+      <li><a href="localização.HTML">Localização</a></li>
+      <li><a href="registrar.html" title="Login/Registrar"><i class="fas fa-user"></i></a></li>
+      <li><a href="https://wa.me/5511999999999" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a></li>
+      <li><a href="https://instagram.com/seuinstagram" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a></li>
+    </ul>
+  </nav>
+
+  <video autoplay muted loop id="video-bg">
+    <source src="IMAGENS/2319-157183741_tiny.mp4" type="video/mp4">
+    Seu navegador não suporta vídeos HTML5.
+  </video>
+
+  <div class="container">
+    <h1>BarberPro</h1>
+    <h2>Estilo, Qualidade e Atendimento de Primeira</h2>
+    <p class="main-p">
+      Bem-vindo à BarberPro, onde cada corte é feito com excelência. Nosso compromisso é oferecer um ambiente moderno,
+      profissionais experientes e os melhores estilos para realçar a sua personalidade.
+    </p>
+    <a href="AGENDAMENTO.html">
+      <button class="btn">Agendar Agora</button>
+    </a>
+
+    <h2 class="section-title">Nossos Serviços</h2>
+    <div class="services">
+      <div class="service">
+        <div>
+          <div class="service-name">Corte Social</div>
+          <div class="service-description">Corte tradicional, na tesoura e máquina, acabamento perfeito.</div>
+        </div>
+        <div class="service-price">R$ 25,00</div>
+      </div>
+      <div class="service">
+        <div>
+          <div class="service-name">Corte Navalhado</div>
+          <div class="service-description">Finalização com navalha para linhas mais precisas e definidas.</div>
+        </div>
+        <div class="service-price">R$ 30,00</div>
+      </div>
+      <div class="service">
+        <div>
+          <div class="service-name">Corte Degradê</div>
+          <div class="service-description">Degradê gradual perfeito, moderno e estiloso.</div>
+        </div>
+        <div class="service-price">R$ 35,00</div>
+      </div>
+      <div class="service">
+        <div>
+          <div class="service-name">Corte Desenhado</div>
+          <div class="service-description">Desenhos personalizados e criativos com precisão.</div>
+        </div>
+        <div class="service-price">R$ 40,00</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">Nosso Portfólio</h2>
+    <div class="portfolio">
+      <div class="portfolio-item">
+        <img src="imagens/Lucas1.png" alt="Corte 1">
+      </div>
+      <div class="portfolio-item">
+        <img src="imagens/Lucas2.png" alt="Corte 2">
+      </div>
+      <div class="portfolio-item">
+        <img src="imagens/Lucas3.png" alt="Corte 3">
+      </div>
+      <div class="portfolio-item">
+        <img src="imagens/pedro 1.png" alt="Corte 4">
+      </div>
+      <div class="portfolio-item">
+        <img src="imagens/pedro 2.png" alt="Corte 5">
+      </div>
+      <div class="portfolio-item">
+        <img src="imagens/pedro 3.png" alt="Corte 6">
+      </div>
+    </div>
+
+    <div class="horario-container">
+      <h2 class="section-title">⏰ Horário de Funcionamento ⏰</h2>
+      <div class="horario-list">
+        <p><strong>Segunda a Sexta:</strong> 09:00 - 12:00 | 14:00 - 19:00</p>
+        <p><strong>Sábado:</strong> 09:00 - 13:00</p>
+        <p><strong>Domingo:</strong> Fechado</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 BarberPro - Todos os direitos reservados.
+  </footer>
+</body>
+
+</html>
