@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meus Agendamentos | BarberPro</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  
+
   <style>
     /* Reset e Fontes */
     * {
@@ -18,12 +19,13 @@
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
-    
+
     body {
       background-color: #0c0c0c;
       color: #e0e0e0;
       min-height: 100vh;
-      padding-top: 80px; /* Espaço para o menu fixo */
+      padding-top: 80px;
+      /* Espaço para o menu fixo */
     }
 
     /* Navegação - Padrão Moderno e Minimalista */
@@ -82,7 +84,7 @@
       text-align: center;
       font-weight: 500;
     }
-    
+
     /* Lista de Agendamentos do Barbeiro */
     .agendamentos-barbeiro-container {
       width: 100%;
@@ -90,7 +92,7 @@
       margin: 0 auto;
       padding: 0 20px;
     }
-    
+
     .agendamento-card {
       background-color: #1a1a1a;
       padding: 20px;
@@ -103,20 +105,20 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease;
     }
-    
+
     .agendamento-card:hover {
-        transform: translateY(-5px);
+      transform: translateY(-5px);
     }
 
     .agendamento-info p {
       margin: 5px 0;
       color: #a0a0a0;
     }
-    
+
     .agendamento-info strong {
       color: #e0e0e0;
     }
-    
+
     .btn-remover {
       background-color: #d9534f;
       color: white;
@@ -128,7 +130,7 @@
       font-weight: 500;
       transition: background-color 0.3s;
     }
-    
+
     .btn-remover:hover {
       background-color: #c9302c;
     }
@@ -143,9 +145,9 @@
       font-size: 0.9rem;
       padding: 20px 0;
     }
-
   </style>
 </head>
+
 <body>
 
   <nav>
@@ -166,50 +168,50 @@
   <div class="agendamentos-barbeiro-container" id="lista-agendamentos">
     <p style="text-align:center; color:#a0a0a0;">Carregando agendamentos...</p>
   </div>
-  
+
   <footer>
     &copy; 2025 BarberPro - Todos os direitos reservados.
   </footer>
 
-<script>
-  // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
-  // API URL, token e IDs são placeholders. Você deve configurar de acordo com seu backend.
-  const API_URL = "http://localhost:8080";
-  const token = localStorage.getItem('jwt_token'); // Exemplo: um token específico para barbeiros.
-  const divListaAgendamentos = document.getElementById('lista-agendamentos');
-  const logoutBtn = document.getElementById('logout-btn');
+  <script>
+    // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
+    // API URL, token e IDs são placeholders. Você deve configurar de acordo com seu backend.
+    const API_URL = "http://localhost:8080";
+    const token = localStorage.getItem('jwt_token'); // Exemplo: um token específico para barbeiros.
+    const divListaAgendamentos = document.getElementById('lista-agendamentos');
+    const logoutBtn = document.getElementById('logout-btn');
 
-  // --- LÓGICA DA APLICAÇÃO ---
+    // --- LÓGICA DA APLICAÇÃO ---
 
-  // 1. VERIFICAR SE O BARBEIRO ESTÁ LOGADO
-  function verificarLoginBarbeiro() {
-    // Esta é uma verificação simples. A lógica real deve ser mais robusta.
-    if (!token) {
-      alert('Acesso negado. Por favor, faça o login como barbeiro.');
-      window.location.href = 'registrar-barbeiro.html'; // Exemplo de página de login para barbeiro
-    }
-  }
-
-  // 2. CARREGAR (READ) E MOSTRAR AGENDAMENTOS DO BARBEIRO
-  async function carregarAgendamentosDoBarbeiro() {
-    // Supondo que a API tem um endpoint para agendamentos do barbeiro logado.
-    try {
-      const response = await fetch(`${API_URL}/api/barbeiros/meus-agendamentos`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Erro ao buscar agendamentos.');
-      
-      const agendamentos = await response.json();
-      divListaAgendamentos.innerHTML = ''; // Limpa a lista antes de renderizar
-      
-      if (agendamentos.length === 0) {
-        divListaAgendamentos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui agendamentos marcados.</p>';
-        return;
+    // 1. VERIFICAR SE O BARBEIRO ESTÁ LOGADO
+    function verificarLoginBarbeiro() {
+      // Esta é uma verificação simples. A lógica real deve ser mais robusta.
+      if (!token) {
+        alert('Acesso negado. Por favor, faça o login como barbeiro.');
+        window.location.href = 'registrar-barbeiro.html'; // Exemplo de página de login para barbeiro
       }
+    }
 
-      agendamentos.forEach(ag => {
-        const dataFormatada = new Date(ag.dataHora).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-        const agendamentoHTML = `
+    // 2. CARREGAR (READ) E MOSTRAR AGENDAMENTOS DO BARBEIRO
+    async function carregarAgendamentosDoBarbeiro() {
+      // Supondo que a API tem um endpoint para agendamentos do barbeiro logado.
+      try {
+        const response = await fetch(`${API_URL}/api/barbeiros/meus-agendamentos`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Erro ao buscar agendamentos.');
+
+        const agendamentos = await response.json();
+        divListaAgendamentos.innerHTML = ''; // Limpa a lista antes de renderizar
+
+        if (agendamentos.length === 0) {
+          divListaAgendamentos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui agendamentos marcados.</p>';
+          return;
+        }
+
+        agendamentos.forEach(ag => {
+          const dataFormatada = new Date(ag.dataHora).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          const agendamentoHTML = `
           <div class="agendamento-card">
             <div class="agendamento-info">
               <p><strong>Cliente:</strong> ${ag.nomeCliente}</p>
@@ -219,53 +221,54 @@
             <button class="btn-remover" data-id="${ag.id}">Remover</button>
           </div>
         `;
-        divListaAgendamentos.innerHTML += agendamentoHTML;
-      });
+          divListaAgendamentos.innerHTML += agendamentoHTML;
+        });
 
-    } catch (error) {
-      console.error(error);
-      divListaAgendamentos.innerHTML = '<p style="color:red; text-align:center;">Falha ao carregar agendamentos.</p>';
-    }
-  }
-
-  // 3. REMOVER (DELETE) UM AGENDAMENTO
-  divListaAgendamentos.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('btn-remover')) {
-      const agendamentoId = e.target.dataset.id;
-      if (confirm('Tem certeza que deseja remover este agendamento?')) {
-        try {
-          const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-
-          if (response.ok) {
-            alert('Agendamento removido com sucesso!');
-            carregarAgendamentosDoBarbeiro();
-          } else {
-            alert('Erro ao remover o agendamento.');
-          }
-        } catch (error) {
-          console.error('Erro na remoção:', error);
-        }
+      } catch (error) {
+        console.error(error);
+        divListaAgendamentos.innerHTML = '<p style="color:red; text-align:center;">Falha ao carregar agendamentos.</p>';
       }
     }
-  });
 
-  // 4. FAZER LOGOUT
-  logoutBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem('jwt_barbeiro_token'); // Remove o token do barbeiro
-    alert('Você foi desconectado.');
-    window.location.href = 'registrar-barbeiro.html'; // Redireciona para a página de login
-  });
+    // 3. REMOVER (DELETE) UM AGENDAMENTO
+    divListaAgendamentos.addEventListener('click', async function (e) {
+      if (e.target.classList.contains('btn-remover')) {
+        const agendamentoId = e.target.dataset.id;
+        if (confirm('Tem certeza que deseja remover este agendamento?')) {
+          try {
+            const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-  // --- INICIALIZAÇÃO DA PÁGINA ---
-  window.onload = () => {
-    verificarLoginBarbeiro();
-    carregarAgendamentosDoBarbeiro();
-  };
-</script>
+            if (response.ok) {
+              alert('Agendamento removido com sucesso!');
+              carregarAgendamentosDoBarbeiro();
+            } else {
+              alert('Erro ao remover o agendamento.');
+            }
+          } catch (error) {
+            console.error('Erro na remoção:', error);
+          }
+        }
+      }
+    });
+
+    // 4. FAZER LOGOUT
+    logoutBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('jwt_barbeiro_token'); // Remove o token do barbeiro
+      alert('Você foi desconectado.');
+      window.location.href = 'registrar-barbeiro.html'; // Redireciona para a página de login
+    });
+
+    // --- INICIALIZAÇÃO DA PÁGINA ---
+    window.onload = () => {
+      verificarLoginBarbeiro();
+      carregarAgendamentosDoBarbeiro();
+    };
+  </script>
 
 </body>
+
 </html>

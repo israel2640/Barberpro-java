@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agendamentos | BarberPro</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  
+
   <style>
     /* Reset e Fontes */
     * {
@@ -18,12 +19,13 @@
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
-    
+
     body {
       background-color: #0c0c0c;
       color: #e0e0e0;
       min-height: 100vh;
-      padding-top: 80px; /* Espaço para o menu fixo */
+      padding-top: 80px;
+      /* Espaço para o menu fixo */
     }
 
     /* Navegação - Padrão Moderno e Minimalista */
@@ -82,7 +84,7 @@
       text-align: center;
       font-weight: 500;
     }
-    
+
     /* Formulário de Agendamento */
     form {
       background: #1a1a1a;
@@ -92,11 +94,11 @@
       margin: 0 auto 40px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
     }
-    
+
     form div {
       margin-bottom: 20px;
     }
-    
+
     label {
       display: block;
       margin-bottom: 8px;
@@ -104,8 +106,9 @@
       font-weight: 400;
       font-size: 1rem;
     }
-    
-    input, select {
+
+    input,
+    select {
       width: 100%;
       padding: 12px;
       border-radius: 8px;
@@ -115,8 +118,9 @@
       font-size: 1rem;
       transition: border-color 0.3s ease;
     }
-    
-    input:focus, select:focus {
+
+    input:focus,
+    select:focus {
       outline: none;
       border-color: #ff9900;
     }
@@ -134,13 +138,13 @@
       transition: all 0.3s ease;
       margin-top: 10px;
     }
-    
+
     button[type="submit"]:hover {
       background-color: #ff9900;
       color: #0c0c0c;
       transform: scale(1.02);
     }
-    
+
     /* Lista de Agendamentos */
     .agendamentos-lista {
       width: 100%;
@@ -148,7 +152,7 @@
       margin: 0 auto;
       padding: 0 20px;
     }
-    
+
     .agendamento-card {
       background-color: #1a1a1a;
       padding: 20px;
@@ -161,20 +165,20 @@
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease;
     }
-    
+
     .agendamento-card:hover {
-        transform: translateY(-5px);
+      transform: translateY(-5px);
     }
 
     .agendamento-info p {
-        margin: 5px 0;
-        color: #a0a0a0;
+      margin: 5px 0;
+      color: #a0a0a0;
     }
-    
+
     .agendamento-info strong {
-        color: #e0e0e0;
+      color: #e0e0e0;
     }
-    
+
     .btn-remover {
       background-color: #d9534f;
       color: white;
@@ -186,7 +190,7 @@
       font-weight: 500;
       transition: background-color 0.3s;
     }
-    
+
     .btn-remover:hover {
       background-color: #c9302c;
     }
@@ -201,9 +205,9 @@
       font-size: 0.9rem;
       padding: 20px 0;
     }
-
   </style>
 </head>
+
 <body>
 
   <nav>
@@ -247,46 +251,46 @@
     </div>
   </div>
 
-<script>
-  // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
-  const API_URL = "http://localhost:8080";
-  const token = localStorage.getItem('jwt_token');
+  <script>
+    // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
+    const API_URL = "http://localhost:8080";
+    const token = localStorage.getItem('jwt_token');
 
-  const form = document.getElementById('form-agendamento');
-  const selectBarbeiros = document.getElementById('barbeiro');
-  const selectServicos = document.getElementById('servico');
-  const divListaAgendamentos = document.getElementById('lista-agendamentos');
-  const logoutBtn = document.getElementById('logout-btn');
+    const form = document.getElementById('form-agendamento');
+    const selectBarbeiros = document.getElementById('barbeiro');
+    const selectServicos = document.getElementById('servico');
+    const divListaAgendamentos = document.getElementById('lista-agendamentos');
+    const logoutBtn = document.getElementById('logout-btn');
 
-  // --- LÓGICA DA APLICAÇÃO ---
+    // --- LÓGICA DA APLICAÇÃO ---
 
-  // 1. VERIFICAR SE O USUÁRIO ESTÁ LOGADO
-  function verificarLogin() {
-    if (!token) {
-      alert('Acesso negado. Por favor, faça o login.');
-      window.location.href = 'registrar.html';
-    }
-  }
-
-  // 2. CARREGAR (READ) E MOSTRAR AGENDAMENTOS DO CLIENTE
-  async function carregarAgendamentos() {
-    try {
-      const response = await fetch(`${API_URL}/agendamentos`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!response.ok) throw new Error('Erro ao buscar agendamentos.');
-      
-      const agendamentos = await response.json();
-      divListaAgendamentos.innerHTML = ''; 
-
-      if (agendamentos.length === 0) {
-        divListaAgendamentos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui agendamentos.</p>';
-        return;
+    // 1. VERIFICAR SE O USUÁRIO ESTÁ LOGADO
+    function verificarLogin() {
+      if (!token) {
+        alert('Acesso negado. Por favor, faça o login.');
+        window.location.href = 'registrar.html';
       }
+    }
 
-      agendamentos.forEach(ag => {
-        const dataFormatada = new Date(ag.dataHora).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-        const agendamentoHTML = `
+    // 2. CARREGAR (READ) E MOSTRAR AGENDAMENTOS DO CLIENTE
+    async function carregarAgendamentos() {
+      try {
+        const response = await fetch(`${API_URL}/agendamentos`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (!response.ok) throw new Error('Erro ao buscar agendamentos.');
+
+        const agendamentos = await response.json();
+        divListaAgendamentos.innerHTML = '';
+
+        if (agendamentos.length === 0) {
+          divListaAgendamentos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui agendamentos.</p>';
+          return;
+        }
+
+        agendamentos.forEach(ag => {
+          const dataFormatada = new Date(ag.dataHora).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+          const agendamentoHTML = `
           <div class="agendamento-card">
             <div class="agendamento-info">
               <p><strong>Serviço:</strong> ${ag.nomeServico} com <strong>${ag.nomeBarbeiro}</strong></p>
@@ -295,118 +299,119 @@
             <button class="btn-remover" data-id="${ag.id}">Remover</button>
           </div>
         `;
-        divListaAgendamentos.innerHTML += agendamentoHTML;
-      });
+          divListaAgendamentos.innerHTML += agendamentoHTML;
+        });
 
-    } catch (error) {
-      console.error(error);
-      divListaAgendamentos.innerHTML = '<p style="color:red; text-align:center;">Falha ao carregar agendamentos.</p>';
+      } catch (error) {
+        console.error(error);
+        divListaAgendamentos.innerHTML = '<p style="color:red; text-align:center;">Falha ao carregar agendamentos.</p>';
+      }
     }
-  }
 
-  // 3. REMOVER (DELETE) UM AGENDAMENTO
-  divListaAgendamentos.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('btn-remover')) {
-      const agendamentoId = e.target.dataset.id;
-      if (confirm('Tem certeza que deseja remover este agendamento?')) {
-        try {
-          const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
+    // 3. REMOVER (DELETE) UM AGENDAMENTO
+    divListaAgendamentos.addEventListener('click', async function (e) {
+      if (e.target.classList.contains('btn-remover')) {
+        const agendamentoId = e.target.dataset.id;
+        if (confirm('Tem certeza que deseja remover este agendamento?')) {
+          try {
+            const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
+              method: 'DELETE',
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-          if (response.ok) {
-            alert('Agendamento removido com sucesso!');
-            carregarAgendamentos();
-          } else {
-            alert('Erro ao remover o agendamento.');
+            if (response.ok) {
+              alert('Agendamento removido com sucesso!');
+              carregarAgendamentos();
+            } else {
+              alert('Erro ao remover o agendamento.');
+            }
+          } catch (error) {
+            console.error('Erro na remoção:', error);
           }
-        } catch (error) {
-          console.error('Erro na remoção:', error);
         }
       }
-    }
-  });
+    });
 
-  // 4. CRIAR (CREATE) UM NOVO AGENDAMENTO
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const dadosAgendamento = {
-      idBarbeiro: selectBarbeiros.value,
-      idServico: selectServicos.value,
-      dataHora: document.getElementById("data").value
-    };
+    // 4. CRIAR (CREATE) UM NOVO AGENDAMENTO
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const dadosAgendamento = {
+        idBarbeiro: selectBarbeiros.value,
+        idServico: selectServicos.value,
+        dataHora: document.getElementById("data").value
+      };
 
-    try {
-      const response = await fetch(`${API_URL}/agendamentos`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(dadosAgendamento)
-      });
+      try {
+        const response = await fetch(`${API_URL}/agendamentos`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(dadosAgendamento)
+        });
 
-      if (response.ok) {
-        alert(`Agendamento realizado com sucesso!`);
-        form.reset();
-        carregarAgendamentos();
-      } else {
-        alert(`Erro ao agendar: Verifique se todos os campos foram preenchidos.`);
+        if (response.ok) {
+          alert(`Agendamento realizado com sucesso!`);
+          form.reset();
+          carregarAgendamentos();
+        } else {
+          alert(`Erro ao agendar: Verifique se todos os campos foram preenchidos.`);
+        }
+      } catch (error) {
+        console.error('Erro na requisição:', error);
       }
-    } catch (error) {
-      console.error('Erro na requisição:', error);
+    });
+
+    // 5. FAZER LOGOUT
+    logoutBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('jwt_token');
+      alert('Você foi desconectado.');
+      window.location.href = 'registrar.html';
+    });
+
+    // --- FUNÇÕES AUXILIARES PARA CARREGAR DROPDOWNS ---
+    async function carregarBarbeiros() {
+      try {
+        const response = await fetch(`${API_URL}/api/dados/barbeiros`);
+        if (!response.ok) throw new Error('Erro ao buscar barbeiros!');
+        const barbeiros = await response.json();
+        barbeiros.forEach(barbeiro => {
+          const option = document.createElement('option');
+          option.value = barbeiro.id;
+          option.textContent = barbeiro.nome;
+          selectBarbeiros.appendChild(option);
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
-  });
 
-  // 5. FAZER LOGOUT
-  logoutBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    localStorage.removeItem('jwt_token');
-    alert('Você foi desconectado.');
-    window.location.href = 'registrar.html';
-  });
-
-  // --- FUNÇÕES AUXILIARES PARA CARREGAR DROPDOWNS ---
-  async function carregarBarbeiros() {
-    try {
-      const response = await fetch(`${API_URL}/api/dados/barbeiros`);
-      if (!response.ok) throw new Error('Erro ao buscar barbeiros!');
-      const barbeiros = await response.json();
-      barbeiros.forEach(barbeiro => {
-        const option = document.createElement('option');
-        option.value = barbeiro.id;
-        option.textContent = barbeiro.nome;
-        selectBarbeiros.appendChild(option);
-      });
-    } catch (error) {
-      console.error(error);
+    async function carregarServicos() {
+      try {
+        const response = await fetch(`${API_URL}/api/dados/servicos`);
+        const servicos = await response.json();
+        servicos.forEach(servico => {
+          const option = document.createElement('option');
+          option.value = servico.id;
+          option.textContent = `${servico.nome} (R$ ${servico.preco.toFixed(2)})`;
+          selectServicos.appendChild(option);
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
 
-  async function carregarServicos() {
-    try {
-      const response = await fetch(`${API_URL}/api/dados/servicos`);
-      const servicos = await response.json();
-      servicos.forEach(servico => {
-        const option = document.createElement('option');
-        option.value = servico.id;
-        option.textContent = `${servico.nome} (R$ ${servico.preco.toFixed(2)})`;
-        selectServicos.appendChild(option);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  // --- INICIALIZAÇÃO DA PÁGINA ---
-  window.onload = () => {
-    verificarLogin();
-    carregarAgendamentos();
-    carregarBarbeiros(); 
-    carregarServicos();
-  };
-</script>
+    // --- INICIALIZAÇÃO DA PÁGINA ---
+    window.onload = () => {
+      verificarLogin();
+      carregarAgendamentos();
+      carregarBarbeiros();
+      carregarServicos();
+    };
+  </script>
 
 </body>
+
 </html>

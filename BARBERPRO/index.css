@@ -1,9 +1,8 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Basic&family=Poppins&display=swap");
 
 :root {
   --background: #000000;
-  --background-border: #FFA500;  
+  --background-border: #ffa500;
 }
 
 * {
@@ -23,8 +22,7 @@ body {
 
 .gallery {
   display: flex;
-  background-color:
-    var(--background);
+  background-color: var(--background);
   gap: 16px;
   scale: 1.6;
 }
@@ -34,12 +32,10 @@ body {
   left: 0px;
   width: 140px;
   height: 160px;
-  background-color:
-    var(--background);
+  background-color: var(--background);
   border-radius: 8px;
   transition: 1000ms all;
-  transform-origin:
-    center left;
+  transform-origin: center left;
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
   outline: 1px solid var(--background);
   overflow: hidden;
@@ -54,7 +50,7 @@ body {
 .card:hover {
   cursor: pointer;
   transform: scale(1.15);
-  box-shadow: 0 0 20px #FFA500; 
+  box-shadow: 0 0 20px #ffa500;
   margin: 5px;
 }
 
@@ -65,9 +61,11 @@ body {
   width: 160px;
   display: flex;
   align-items: end;
-  background: linear-gradient(to top,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
   color: white;
   left: 0px;
   bottom: 0px;
@@ -75,13 +73,11 @@ body {
   padding-bottom: 10px;
 }
 
-.card:hover~.card {
+.card:hover ~ .card {
   font-weight: bold;
   cursor: pointer;
   transform: translateX(22px);
 }
-
-
 
 /* -- External Social Link CSS Styles -- */
 
@@ -89,7 +85,7 @@ body {
   top: 120px;
 }
 
-#source-link>i {
+#source-link > i {
   color: rgb(94, 106, 210);
 }
 
@@ -97,18 +93,16 @@ body {
   top: 65px;
 }
 
-#yt-link>i {
+#yt-link > i {
   color: rgb(219, 31, 106);
-
 }
 
 #Fund-link {
   top: 10px;
 }
 
-#Fund-link>i {
+#Fund-link > i {
   color: rgb(255, 251, 0);
-
 }
 
 .meta-link {
@@ -134,15 +128,14 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.meta-link>i,
-.meta-link>span {
+.meta-link > i,
+.meta-link > span {
   height: 20px;
   line-height: 20px;
 }
 
-.meta-link>span {
+.meta-link > span {
   color: white;
   font-family: "Rubik", sans-serif;
   transition: color 600ms;
 }
-
