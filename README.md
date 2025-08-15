@@ -150,7 +150,7 @@ CREATE TABLE `agendamentos` (
 );
 
 -- Insere os dados iniciais de barbeiros e serviços
-INSERT INTO barbeiros (nome) VALUES ('Belga'), ('Lucas');
+INSERT INTO barbeiros (nome) VALUES ('Lucas'), ('Pedro');
 INSERT INTO servicos (nome, descricao, preco) VALUES
 ('Corte Social', 'Corte tradicional, na tesoura e máquina, acabamento perfeito.', 25.00),
 ('Corte Navalhado', 'Finalização com navalha para linhas mais precisas e definidas.', 30.00),
