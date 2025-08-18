@@ -44,7 +44,7 @@ Git & GitHub	Versionamento e armazenamento do código.
 
 <p align="center">
   <a href="https://youtu.be/fyrSZ7QnIyM" target="_blank">
-    <img src="BARBERPRO/imagens/Logo.png" alt="Clique para assistir à demonstração do BarberPro">
+    <img src="BARBERPRO/imagens/Logo.png" alt="Clique para assistir à demonstração do BarberPro" width="500">
   </a>
 </p>
 
