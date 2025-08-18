@@ -1,16 +1,21 @@
-BarberPro - Sistema de Agendamento para Barbearias
-📝 Descrição do Projeto
-BarberPro é um sistema web full-stack para gerenciamento de agendamentos em barbearias. O projeto permite que clientes se cadastrem, façam login, visualizem e marquem horários. Do outro lado, os barbeiros também podem se autenticar no sistema para visualizar sua agenda de compromissos.
+💈 BarberPro - Sistema de Agendamento para Barbearias
+<p align="center">
+<img src="BARBERPRO/imagens/Logo.png" alt="Banner do BarberPro">
+</p>
 
-🎓 Contexto Acadêmico
-Este projeto foi desenvolvido como um trabalho prático para o curso técnico de Desenvolvimento de Sistemas da Escola Técnica Estadual Cícero Dias, em Recife-PE. O objetivo foi aplicar os conhecimentos de desenvolvimento back-end com Java e Spring Boot, integrando com um front-end funcional para criar uma aplicação web completa e realista.
+<p align="center">
+<img alt="Status do Projeto" src="https://img.shields.io/badge/STATUS-Em%20Desenvolvimento-yellow">
+</p>
+
+📝 Visão Geral do Projeto
+BarberPro é um sistema web full-stack para gerenciamento de agendamentos em barbearias. O projeto permite que clientes se cadastrem, façam login e marquem horários. Do outro lado, os barbeiros podem se autenticar no sistema para visualizar sua agenda de compromissos. Este projeto foi desenvolvido para aplicar de forma prática os conhecimentos adquiridos no curso técnico de Desenvolvimento de Sistemas.
 
 ✨ Funcionalidades Principais
-Autenticação de Usuários: Sistema de login seguro com Tokens JWT.
+Autenticação Segura: Sistema de login com Tokens JWT para garantir a segurança dos dados.
 
-Controle de Acesso por Papel (Role): Distinção entre usuários CLIENTE e BARBEIRO.
+Controle de Acesso por Papel: Distinção clara entre perfis de CLIENTE e BARBEIRO, com permissões diferentes.
 
-CRUD de Agendamentos (para Clientes):
+Gestão de Agendamentos (Cliente):
 
 Criação: Clientes podem agendar um novo horário com seu barbeiro e serviço de preferência.
 
@@ -18,58 +23,44 @@ Leitura: Clientes podem visualizar uma lista de seus próprios agendamentos.
 
 Exclusão: Clientes podem cancelar um agendamento existente.
 
-Dashboard do Barbeiro:
+Painel do Barbeiro:
 
-Barbeiros podem fazer login e visualizar uma lista de todos os seus compromissos agendados.
+(Em desenvolvimento) Área para barbeiros visualizarem e gerenciarem seus compromissos.
 
-Carregamento Dinâmico: As listas de barbeiros e serviços são carregadas dinamicamente da API no front-end.
+Carregamento Dinâmico: As listas de barbeiros e serviços são carregadas dinamicamente da API REST no front-end.
 
 🚀 Tecnologias Utilizadas
-Back-end
-Java 17+
+O projeto foi construído utilizando as seguintes tecnologias:
 
-Spring Boot 3: Framework principal para a construção da API REST.
+Tecnologia	Descrição
+Java 17	Linguagem principal do back-end.
+Spring Boot 3	Framework para a construção da API REST.
+Spring Security	Gerenciamento de autenticação e autorização com JWT.
+Spring Data JPA	Persistência de dados e comunicação com o banco.
+MySQL	Banco de dados relacional para armazenamento dos dados.
+HTML5 / CSS3	Estrutura e estilo do front-end.
+JavaScript (ES6+)	Lógica do front-end e comunicação com a API (Fetch API).
+Git & GitHub	Versionamento e armazenamento do código.
 
-Spring Security: Para gerenciamento de autenticação e autorização.
+Exportar para as Planilhas
+🖼️ Layout (Preview)
+(Dica: Grave um GIF curto mostrando o fluxo de agendamento e coloque aqui. Fica muito profissional!)
 
-Spring Data JPA: Para persistência de dados e comunicação com o banco.
+<p align="center">
+<img src="URL_DO_SEU_GIF_OU_IMAGEM_AQUI" alt="Demonstração do Projeto">
+</p>
 
-Hibernate: Implementação da especificação JPA.
-
-JWT (Java Web Token): Para a criação de tokens de autenticação stateless.
-
-Maven: Gerenciador de dependências do projeto.
-
-Front-end
-HTML5
-
-CSS3
-
-JavaScript (ES6+): Utilizando a Fetch API para comunicação com o back-end.
-
-Banco de Dados
-MySQL: Sistema de gerenciamento de banco de dados relacional.
-
-Ferramentas e Ambiente
-IntelliJ IDEA: IDE de desenvolvimento.
-
-MySQL Workbench: Para modelagem e gerenciamento do banco de dados.
-
-Git & GitHub: Para versionamento de código.
-
-⚙️ Como Executar o Projeto
-Siga os passos abaixo para executar a aplicação localmente.
+⚙️ Como Executar o Projeto Localmente
+Siga os passos abaixo para executar a aplicação na sua máquina.
 
 Pré-requisitos
-JDK 17 ou superior
+JDK 17
 
 Maven 3.8+
 
-MySQL 8.0+
+[link suspeito removido]
 
-Uma IDE Java (ex: IntelliJ, Eclipse)
-
-Um servidor web para o front-end (como a extensão Live Server do VSCode)
+Uma IDE Java (ex: IntelliJ IDEA)
 
 1. Configuração do Back-end
 Bash
@@ -83,87 +74,30 @@ Abra o projeto na sua IDE.
 
 Crie um banco de dados no MySQL com o nome barberpro_java_db.
 
-Execute o script SQL fornecido no projeto para criar as tabelas e popular os dados iniciais.
-
-Configure o arquivo src/main/resources/application.properties com suas credenciais do banco de dados e uma chave secreta para o JWT:
+No arquivo src/main/resources/application.properties, configure suas credenciais do banco e a chave secreta do JWT:
 
 Properties
 
 spring.datasource.url=jdbc:mysql://localhost:3306/barberpro_java_db
-spring.datasource.username=root
-spring.datasource.password=sua_senha_do_mysql
+spring.datasource.username=seu_usuario_mysql
+spring.datasource.password=sua_senha_mysql
 
 api.security.token.secret=sua-chave-secreta-para-o-jwt
-Execute a classe principal ApiApplication.java para iniciar o servidor back-end na porta 8080.
+Execute a classe principal ApiApplication.java para iniciar o servidor back-end (porta 8080).
 
 2. Execução do Front-end
-Navegue até a pasta dos arquivos HTML (/src/main/resources/static ou a pasta onde eles estiverem).
+Abra a pasta dos arquivos HTML (ex: /src/main/resources/static).
 
-Abra os arquivos com um servidor local (como o Live Server no VSCode). Isso é importante para evitar problemas de CORS.
+Use um servidor local (como a extensão Live Server do VSCode) para servir os arquivos e evitar problemas de CORS.
 
-Certifique-se de que a variável API_URL nos arquivos JavaScript (agendamento.html, registrar.html, etc.) está apontando para http://localhost:8080.
+Verifique se a variável API_URL nos arquivos JavaScript está apontando para http://localhost:8080.
 
 👨‍💻 Autor
-<img src="URL_DA_SUA_FOTO_AQUI" width=115><br><sub>[COLOQUE SEU NOME AQUI]</sub>
+Feito com ❤️ por [Israel Paz].
 
-Exportar para as Planilhas
+<img src="BARBERPRO/imagens/israel-paz.jpg" width=115><br>
+
 🙏 Agradecimentos
-Agradecimentos ao professor [Vinicios] e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
+Agradecimentos especiais ao professor [Nome do Professor] e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
 
-****Banco de dados***
-DROP DATABASE IF EXISTS barberpro_java_db;
-CREATE DATABASE barberpro_java_db;
-USE barberpro_java_db;
-
-CREATE TABLE `clientes` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(191) NOT NULL UNIQUE,
-  `senha` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `barbeiros` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `servicos` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(100) NOT NULL,
-  `descricao` VARCHAR(255) NULL,
-  `preco` DECIMAL(10, 2) NOT NULL,
-  PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `agendamentos` (
-  `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `data_hora` DATETIME NOT NULL,
-  `cliente_id` BIGINT NOT NULL,
-  `barbeiro_id` BIGINT NOT NULL,
-  `servico_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`cliente_id`) REFERENCES `clientes`(`id`),
-  FOREIGN KEY (`barbeiro_id`) REFERENCES `barbeiros`(`id`),
-  FOREIGN KEY (`servico_id`) REFERENCES `servicos`(`id`)
-);
-
--- Insere os dados iniciais de barbeiros e serviços
-INSERT INTO barbeiros (nome) VALUES ('Lucas'), ('Pedro');
-INSERT INTO servicos (nome, descricao, preco) VALUES
-('Corte Social', 'Corte tradicional, na tesoura e máquina, acabamento perfeito.', 25.00),
-('Corte Navalhado', 'Finalização com navalha para linhas mais precisas e definidas.', 30.00),
-('Corte Degradê', 'Degradê gradual perfeito, moderno e estiloso.', 35.00),
-('Corte Desenhado', 'Desenhos personalizados e criativos com precisão.', 40.00);
-
-
-SELECT * FROM barbeiros;
-SELECT * FROM agendamentos;
-DELETE FROM agendamentos WHERE id = 2;
-SELECT * FROM clientes;
-SELECT nome, email, senha FROM clientes;
-DELETE FROM clientes WHERE id IN (1, 2);
-USE barberpro_java_db;
-SELECT email FROM usuarios;
-DROP DATABASE barberpro_java_db;
+(Observação: Lembre-se de substituir os placeholders como URL_DA_SUA_FOTO_AQUI, seu-usuario/seu-repositorio.git, etc., pelos seus dados reais.)
