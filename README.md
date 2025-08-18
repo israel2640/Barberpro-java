@@ -47,7 +47,7 @@ Exportar para as Planilhas
 (Dica: Grave um GIF curto mostrando o fluxo de agendamento e coloque aqui. Fica muito profissional!)
 
 <p align="center">
-<img src="URL_DO_SEU_GIF_OU_IMAGEM_AQUI" alt="Demonstração do Projeto">
+<img src="BARBERPRO/imagens/barberpro-demo.mp4" alt="Demonstração do Projeto">
 </p>
 
 ⚙️ Como Executar o Projeto Localmente
