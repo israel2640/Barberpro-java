@@ -58,8 +58,6 @@ JDK 17
 
 Maven 3.8+
 
-[link suspeito removido]
-
 Uma IDE Java (ex: IntelliJ IDEA)
 
 1. Configuração do Back-end
@@ -98,5 +96,5 @@ Feito com ❤️ por [Israel Paz].
 <img src="BARBERPRO/imagens/israel-paz.jpg" width=115><br>
 
 🙏 Agradecimentos
-Agradecimentos especiais ao professor [Emerson, Breno e Vinícius] e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
+Agradecimentos especiais ao professores Emerson, Breno e Vinícius e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
 
