@@ -43,7 +43,9 @@ JavaScript (ES6+)	Lógica do front-end e comunicação com a API (Fetch API).
 Git & GitHub	Versionamento e armazenamento do código.
 
 <p align="center">
-<img src="https://youtu.be/fyrSZ7QnIyM" alt="Demonstração do Projeto">
+  <a href="https://youtu.be/fyrSZ7QnIyM" target="_blank">
+    <img src="BARBERPRO/imagens/Logo.png" alt="Clique para assistir à demonstração do BarberPro">
+  </a>
 </p>
 
 ⚙️ Como Executar o Projeto Localmente
