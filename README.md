@@ -42,12 +42,8 @@ HTML5 / CSS3	Estrutura e estilo do front-end.
 JavaScript (ES6+)	Lógica do front-end e comunicação com a API (Fetch API).
 Git & GitHub	Versionamento e armazenamento do código.
 
-Exportar para as Planilhas
-🖼️ Layout (Preview)
-(Dica: Grave um GIF curto mostrando o fluxo de agendamento e coloque aqui. Fica muito profissional!)
-
 <p align="center">
-<img src="BARBERPRO/imagens/barberpro-demo.mp4" alt="Demonstração do Projeto">
+<img src="https://youtu.be/fyrSZ7QnIyM" alt="Demonstração do Projeto">
 </p>
 
 ⚙️ Como Executar o Projeto Localmente
