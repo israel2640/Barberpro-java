@@ -95,6 +95,6 @@ Feito com ❤️ por [Israel Paz].
 
 <img src="BARBERPRO/imagens/israel-paz.jpg" width=115><br>
 
-🙏 Agradecimentos
-Agradecimentos especiais ao professores Emerson, Breno e Vinícius e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
+
+🙏 Agradecimentos especiais ao professores Emerson, Breno e Vinícius e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
 
