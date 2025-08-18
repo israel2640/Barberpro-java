@@ -98,6 +98,6 @@ Feito com ❤️ por [Israel Paz].
 <img src="BARBERPRO/imagens/israel-paz.jpg" width=115><br>
 
 🙏 Agradecimentos
-Agradecimentos especiais ao professor [Nome do Professor] e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
+Agradecimentos especiais ao professor [Emerson, Breno e Vinícius] e à ETE Cícero Dias pela orientação e oportunidade de desenvolver este projeto.
 
 (Observação: Lembre-se de substituir os placeholders como URL_DA_SUA_FOTO_AQUI, seu-usuario/seu-repositorio.git, etc., pelos seus dados reais.)
