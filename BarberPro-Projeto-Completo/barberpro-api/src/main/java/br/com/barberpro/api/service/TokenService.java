@@ -15,12 +15,11 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    
     private final String secret;
 
-    
+    // A CORREÇÃO ESTÁ AQUI: Usando os getters para acessar o segredo
     public TokenService(ApiProperties apiProperties) {
-        this.secret = apiProperties.security().token().secret();
+        this.secret = apiProperties.getSecurity().getToken().getSecret();
     }
 
     public String gerarToken(Cliente cliente) {
@@ -50,7 +49,6 @@ public class TokenService {
     }
 
     private Instant dataExpiracao() {
-        
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
 }
