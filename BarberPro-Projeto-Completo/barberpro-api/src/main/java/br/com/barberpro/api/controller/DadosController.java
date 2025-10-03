@@ -23,11 +23,27 @@ public class DadosController {
 
     @GetMapping("/barbeiros")
     public List<Barbeiro> listarBarbeiros() {
-        return barbeiroRepository.findAll();
+        // --- LOG ADICIONADO ---
+        System.out.println("--- LOG BACKEND: Endpoint /api/dados/barbeiros foi chamado. ---");
+        
+        List<Barbeiro> barbeiros = barbeiroRepository.findAll();
+        
+        // --- LOG ADICIONADO ---
+        System.out.println("--- LOG BACKEND: " + barbeiros.size() + " barbeiros encontrados no banco. ---");
+        
+        return barbeiros;
     }
 
     @GetMapping("/servicos")
     public List<Servico> listarServicos() {
-        return servicoRepository.findAll();
+        // --- LOG ADICIONADO ---
+        System.out.println("--- LOG BACKEND: Endpoint /api/dados/servicos foi chamado. ---");
+        
+        List<Servico> servicos = servicoRepository.findAll();
+        
+        // --- LOG ADICIONADO ---
+        System.out.println("--- LOG BACKEND: " + servicos.size() + " serviços encontrados no banco. ---");
+        
+        return servicos;
     }
 }

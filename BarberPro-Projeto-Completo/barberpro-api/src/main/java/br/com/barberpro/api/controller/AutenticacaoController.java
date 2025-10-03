@@ -24,13 +24,12 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody DadosAutenticacao dados) {
+    // A CORREÇÃO FOI FEITA AQUI, ESPECIFICANDO O TIPO DE RETORNO
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody DadosAutenticacao dados) {
         var token = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         var authentication = manager.authenticate(token);
 
-
         var tokenJWT = tokenService.gerarToken((Cliente) authentication.getPrincipal());
-
 
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }

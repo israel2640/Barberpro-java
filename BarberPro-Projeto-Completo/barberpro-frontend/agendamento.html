@@ -388,20 +388,29 @@
       }
     }
 
-    async function carregarServicos() {
+  async function carregarServicos() {
+      console.log("1. Buscando serviços..."); // <-- LOG 1
       try {
-        const response = await fetch(`${API_URL}/api/dados/servicos`);
-        const servicos = await response.json();
-        servicos.forEach(servico => {
-          const option = document.createElement('option');
-          option.value = servico.id;
-          option.textContent = `${servico.nome} (R$ ${servico.preco.toFixed(2)})`;
-          selectServicos.appendChild(option);
-        });
+          const response = await fetch(`${API_URL}/api/dados/servicos`);
+          console.log("2. Resposta da API para serviços:", response); // <-- LOG 2
+          
+          if (!response.ok) {
+              throw new Error(`Erro HTTP! Status: ${response.status}`);
+          }
+
+          const servicos = await response.json();
+          console.log("3. Dados dos serviços recebidos (JSON):", servicos); // <-- LOG 3
+
+          servicos.forEach(servico => {
+              const option = document.createElement('option');
+              option.value = servico.id;
+              option.textContent = `${servico.nome} (R$ ${servico.preco.toFixed(2)})`;
+              selectServicos.appendChild(option);
+          });
       } catch (error) {
-        console.error(error);
+          console.error("ERRO CRÍTICO ao carregar serviços:", error); // <-- LOG DE ERRO
       }
-    }
+  }
 
     // --- INICIALIZAÇÃO DA PÁGINA ---
     window.onload = () => {
