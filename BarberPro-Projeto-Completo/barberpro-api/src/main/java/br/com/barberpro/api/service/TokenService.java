@@ -1,11 +1,11 @@
 package br.com.barberpro.api.service;
 
-import br.com.barberpro.api.config.ApiProperties;
 import br.com.barberpro.api.domain.Cliente;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Value; // <-- IMPORTANTE
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -15,16 +15,13 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    private final String secret;
-
-    // A CORREÇÃO ESTÁ AQUI: Usando os getters para acessar o segredo
-    public TokenService(ApiProperties apiProperties) {
-        this.secret = apiProperties.getSecurity().getToken().getSecret();
-    }
+    // Injeta o valor diretamente do application.properties
+    @Value("${api.security.token.secret}")
+    private String secret;
 
     public String gerarToken(Cliente cliente) {
         try {
-            var algoritmo = Algorithm.HMAC256(secret);
+            Algorithm algoritmo = Algorithm.HMAC256(secret); // Agora 'secret' não será nulo
             return JWT.create()
                     .withIssuer("API BarberPro")
                     .withSubject(cliente.getEmail())
@@ -37,7 +34,7 @@ public class TokenService {
 
     public String getSubject(String tokenJWT) {
         try {
-            var algoritmo = Algorithm.HMAC256(secret);
+            Algorithm algoritmo = Algorithm.HMAC256(secret);
             return JWT.require(algoritmo)
                     .withIssuer("API BarberPro")
                     .build()
