@@ -12,7 +12,7 @@ public class Servico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(unique = true)
     private String nome;
     private String descricao;
     private BigDecimal preco;
