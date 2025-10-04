@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager; // <-- AÑADIR IMPORT
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration; // <-- AÑADIR IMPORT
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -12,7 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig { // <-- Usando o nome mais simples
+public class SecurityConfig {
 
     @Autowired
     private SecurityFilter securityFilter;
@@ -22,14 +24,20 @@ public class SecurityConfig { // <-- Usando o nome mais simples
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    // Libera o acesso público para login, cadastro e busca de dados
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/clientes").permitAll();
                     req.requestMatchers("/api/dados/**").permitAll();
-                    // Exige autenticação para todo o resto
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    // --- MÉTODO AÑADIDO PARA RESOLVER EL ERROR ---
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+    // ------------------------------------------
+
 }
