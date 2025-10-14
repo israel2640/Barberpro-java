@@ -45,14 +45,12 @@ public class AdminController {
         return ResponseEntity.ok(clienteRepository.findAll());
     }
     
-    // NOVO MÉTODO DE EDIÇÃO DE CLIENTE
     @PutMapping("/usuarios/{id}")
     @Transactional
     public ResponseEntity<Cliente> editarUsuario(@PathVariable Long id, @RequestBody Cliente dados) {
         var usuario = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         usuario.setNome(dados.getNome());
         usuario.setEmail(dados.getEmail());
-        // Apenas atualiza a senha se uma nova for fornecida
         if (dados.getSenha() != null && !dados.getSenha().isBlank()) {
             usuario.setSenha(passwordEncoder.encode(dados.getSenha()));
         }
@@ -79,14 +77,22 @@ public class AdminController {
         return ResponseEntity.ok(barbeiroRepository.save(barbeiro));
     }
     
-    // NOVO MÉTODO DE EDIÇÃO DE BARBEIRO
+    // --- MÉTODO DE EDIÇÃO DE BARBEIRO ATUALIZADO ---
     @PutMapping("/barbeiros/{id}")
     @Transactional
     public ResponseEntity<Barbeiro> editarBarbeiro(@PathVariable Long id, @RequestBody Barbeiro dados) {
         var barbeiro = barbeiroRepository.findById(id).orElseThrow(() -> new RuntimeException("Barbeiro não encontrado"));
+        
+        // Atualiza nome e email
         barbeiro.setNome(dados.getNome());
         barbeiro.setEmail(dados.getEmail());
-        return ResponseEntity.ok(barbeiro);
+
+        // Apenas atualiza a senha se uma nova for enviada no formulário
+        if (dados.getSenha() != null && !dados.getSenha().isBlank()) {
+            barbeiro.setSenha(passwordEncoder.encode(dados.getSenha()));
+        }
+        
+        return ResponseEntity.ok(barbeiroRepository.save(barbeiro));
     }
 
     @DeleteMapping("/barbeiros/{id}")

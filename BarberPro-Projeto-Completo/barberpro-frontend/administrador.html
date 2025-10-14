@@ -465,18 +465,23 @@
       }
     }
 
-    // --- FUNÇÕES DE CRUD (BARBEIROS) ---
+// --- FUNÇÕES DE CRUD (BARBEIROS) ---
     formBarbeiro.addEventListener('submit', async function (e) {
       e.preventDefault();
       const id = document.getElementById('barbeiro-id').value;
       const nome = document.getElementById('barbeiro-nome').value;
       const email = document.getElementById('barbeiro-email').value;
-      const senha = document.getElementById('barbeiro-senha').value; // Captura a senha
+      const senha = document.getElementById('barbeiro-senha').value;
 
       const metodo = id ? 'PUT' : 'POST';
       const url = id ? `${API_URL}/admin/barbeiros/${id}` : `${API_URL}/admin/barbeiros`;
 
-      const dados = { nome, email, senha }; // Envia a senha para a API
+      const dados = { nome, email };
+      // Lógica aprimorada: Só envia a senha se for um novo barbeiro (obrigatório)
+      // ou se uma nova senha foi digitada durante a edição.
+      if (!id || senha) {
+        dados.senha = senha;
+      }
 
       try {
         const response = await fetch(url, {
@@ -487,6 +492,10 @@
         if (response.ok) {
           alert(`Barbeiro ${id ? 'atualizado' : 'adicionado'} com sucesso!`);
           formBarbeiro.reset();
+          // Garante que o placeholder e a obrigatoriedade da senha voltem ao normal após salvar
+          const campoSenha = document.getElementById('barbeiro-senha');
+          campoSenha.placeholder = "Senha do barbeiro";
+          campoSenha.required = true;
           carregarBarbeiros();
         } else {
           alert('Erro ao salvar barbeiro.');
@@ -496,10 +505,16 @@
       }
     });
 
+    // Esta função foi atualizada para melhorar a experiência de edição
     function preencherFormBarbeiro(id, nome, email) {
       document.getElementById('barbeiro-id').value = id;
       document.getElementById('barbeiro-nome').value = nome;
       document.getElementById('barbeiro-email').value = email;
+      
+      const campoSenha = document.getElementById('barbeiro-senha');
+      campoSenha.value = ''; // Limpa o campo de senha
+      campoSenha.placeholder = 'Deixe em branco para não alterar a senha'; // Informa o admin
+      campoSenha.required = false; // Senha não é obrigatória ao editar
     }
 
     async function excluirBarbeiro(id) {
