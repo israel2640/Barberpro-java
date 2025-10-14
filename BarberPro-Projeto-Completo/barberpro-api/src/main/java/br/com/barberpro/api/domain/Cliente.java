@@ -7,6 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "clientes")
@@ -23,6 +25,10 @@ public class Cliente implements UserDetails {
 
     private String senha;
 
+    // --- 1. CAMPO ADICIONADO ---
+    private String roles;
+
+    // --- GETTERS E SETTERS (Pode usar Lombok se preferir) ---
     public Long getId() {
         return id;
     }
@@ -55,22 +61,35 @@ public class Cliente implements UserDetails {
         this.senha = senha;
     }
 
+    public String getRoles() {
+        return roles;
+    }
 
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
+    // --- 2. MÉTODO ATUALIZADO ---
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.roles == null || this.roles.isBlank()) {
+            // Se não houver role definida, assume que é um usuário comum
+            return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+        
+        // Lê a(s) role(s) do banco e as converte para o formato do Spring Security
+        return Stream.of(this.roles.split(","))
+                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
+                     .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-
         return this.senha;
     }
 
     @Override
     public String getUsername() {
-
         return this.email;
     }
 
