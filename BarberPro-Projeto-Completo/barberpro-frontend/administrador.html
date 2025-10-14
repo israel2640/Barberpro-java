@@ -340,7 +340,7 @@
           <td>${ag.nomeCliente}</td>
           <td>${ag.nomeBarbeiro}</td>
           <td>${ag.nomeServico}</td>
-          <td>R$ ${ag.preco.toFixed(2)}</td>
+          <td>${ag.precoServico ? `R$ ${ag.precoServico.toFixed(2)}` : 'Inválido'}</td>
           <td>${new Date(ag.dataHora).toLocaleDateString('pt-BR')}</td>
           <td>${new Date(ag.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</td>
         `;
