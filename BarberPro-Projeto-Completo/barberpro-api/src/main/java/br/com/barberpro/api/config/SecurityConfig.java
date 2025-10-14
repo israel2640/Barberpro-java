@@ -26,26 +26,26 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
-                    
+
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/clientes").permitAll();
                     req.requestMatchers("/api/dados/**").permitAll();
 
-                    
-                    
+
+
                     req.requestMatchers(HttpMethod.POST, "/login/barbeiro").permitAll();
 
-                    
+
                     req.requestMatchers("/barbeiro/**").hasRole("BARBER");
 
-                    
+
                     req.requestMatchers(HttpMethod.PATCH, "/agendamentos/**/concluir").hasRole("BARBER");
 
-                    
-                    req.requestMatchers(HttpMethod.DELETE, "/agendamentos/**").hasAnyRole("USER", "BARBER");
-                    
 
-                    
+                    req.requestMatchers(HttpMethod.DELETE, "/agendamentos/**").hasAnyRole("USER", "BARBER");
+
+                    req.requestMatchers("/admin/**").hasRole("ADMIN");
+
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
