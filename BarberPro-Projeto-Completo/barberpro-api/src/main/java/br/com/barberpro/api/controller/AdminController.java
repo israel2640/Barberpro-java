@@ -32,33 +32,41 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // --- Endpoint para Listar todos os Agendamentos ---
+    // --- AGENDAMENTOS ---
     @GetMapping("/agendamentos")
     public ResponseEntity<List<DadosDetalhamentoAgendamento>> listarTodosAgendamentos() {
         List<Agendamento> agendamentos = agendamentoRepository.findAll();
-        List<DadosDetalhamentoAgendamento> agendamentosDTO = agendamentos.stream()
-                .map(DadosDetalhamentoAgendamento::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(agendamentosDTO);
+        return ResponseEntity.ok(agendamentos.stream().map(DadosDetalhamentoAgendamento::new).collect(Collectors.toList()));
     }
 
-    // --- Endpoints para Gerenciar Clientes (Usuários) ---
+    // --- CLIENTES (USUÁRIOS) ---
     @GetMapping("/usuarios")
     public ResponseEntity<List<Cliente>> listarUsuarios() {
         return ResponseEntity.ok(clienteRepository.findAll());
+    }
+    
+    // NOVO MÉTODO DE EDIÇÃO DE CLIENTE
+    @PutMapping("/usuarios/{id}")
+    @Transactional
+    public ResponseEntity<Cliente> editarUsuario(@PathVariable Long id, @RequestBody Cliente dados) {
+        var usuario = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+        usuario.setNome(dados.getNome());
+        usuario.setEmail(dados.getEmail());
+        // Apenas atualiza a senha se uma nova for fornecida
+        if (dados.getSenha() != null && !dados.getSenha().isBlank()) {
+            usuario.setSenha(passwordEncoder.encode(dados.getSenha()));
+        }
+        return ResponseEntity.ok(usuario);
     }
 
     @DeleteMapping("/usuarios/{id}")
     @Transactional
     public ResponseEntity<Void> excluirUsuario(@PathVariable Long id) {
-        if (!clienteRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
         clienteRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    // --- Endpoints para Gerenciar Barbeiros ---
+    // --- BARBEIROS ---
     @GetMapping("/barbeiros")
     public ResponseEntity<List<Barbeiro>> listarBarbeiros() {
         return ResponseEntity.ok(barbeiroRepository.findAll());
@@ -67,18 +75,23 @@ public class AdminController {
     @PostMapping("/barbeiros")
     @Transactional
     public ResponseEntity<Barbeiro> criarBarbeiro(@RequestBody Barbeiro barbeiro) {
-        // Criptografa a senha antes de salvar
         barbeiro.setSenha(passwordEncoder.encode(barbeiro.getSenha()));
-        Barbeiro novoBarbeiro = barbeiroRepository.save(barbeiro);
-        return ResponseEntity.ok(novoBarbeiro);
+        return ResponseEntity.ok(barbeiroRepository.save(barbeiro));
+    }
+    
+    // NOVO MÉTODO DE EDIÇÃO DE BARBEIRO
+    @PutMapping("/barbeiros/{id}")
+    @Transactional
+    public ResponseEntity<Barbeiro> editarBarbeiro(@PathVariable Long id, @RequestBody Barbeiro dados) {
+        var barbeiro = barbeiroRepository.findById(id).orElseThrow(() -> new RuntimeException("Barbeiro não encontrado"));
+        barbeiro.setNome(dados.getNome());
+        barbeiro.setEmail(dados.getEmail());
+        return ResponseEntity.ok(barbeiro);
     }
 
     @DeleteMapping("/barbeiros/{id}")
     @Transactional
     public ResponseEntity<Void> excluirBarbeiro(@PathVariable Long id) {
-        if (!barbeiroRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        }
         barbeiroRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
