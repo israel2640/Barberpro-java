@@ -258,18 +258,12 @@
         </div>
     </div>
 
-    <script>
-        // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
+<script>
+        // --- CONFIGURAÇÃO GLOBAL ---
         const API_URL = "https://barberpro-api-1o2y.onrender.com";
         const token = localStorage.getItem('jwt_token');
 
-        const form = document.getElementById('form-agendamento');
-        const selectBarbeiros = document.getElementById('barbeiro');
-        const selectServicos = document.getElementById('servico');
-        const divListaAgendamentos = document.getElementById('lista-agendamentos');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // --- LÓGICA DA APLICAÇÃO ---
+        // --- FUNÇÕES DA APLICAÇÃO ---
 
         // 1. VERIFICAR SE O USUÁRIO ESTÁ LOGADO
         function verificarLogin() {
@@ -281,6 +275,7 @@
 
         // 2. CARREGAR (READ) E MOSTRAR AGENDAMENTOS DO CLIENTE
         async function carregarAgendamentos() {
+            const divListaAgendamentos = document.getElementById('lista-agendamentos');
             try {
                 const response = await fetch(`${API_URL}/agendamentos`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -315,75 +310,11 @@
             }
         }
 
-        // 3. REMOVER (DELETE) UM AGENDAMENTO
-        divListaAgendamentos.addEventListener('click', async function (e) {
-            if (e.target.classList.contains('btn-remover')) {
-                const agendamentoId = e.target.dataset.id;
-                if (confirm('Tem certeza que deseja remover este agendamento?')) {
-                    try {
-                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
-                            method: 'DELETE',
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-
-                        if (response.ok) {
-                            alert('Agendamento removido com sucesso!');
-                            carregarAgendamentos();
-                        } else {
-                            alert('Erro ao remover o agendamento.');
-                        }
-                    } catch (error) {
-                        console.error('Erro na remoção:', error);
-                    }
-                }
-            }
-        });
-
-        // 4. CRIAR (CREATE) UM NOVO AGENDAMENTO
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault();
-            const dadosAgendamento = {
-                idBarbeiro: selectBarbeiros.value,
-                idServico: selectServicos.value,
-                dataHora: document.getElementById("data").value
-            };
-
-            try {
-                const response = await fetch(`${API_URL}/agendamentos`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(dadosAgendamento)
-                });
-
-                if (response.ok) {
-                    alert(`Agendamento realizado com sucesso!`);
-                    form.reset();
-                    carregarAgendamentos();
-                } else {
-                    alert(`Erro ao agendar: Verifique se todos os campos foram preenchidos.`);
-                }
-            } catch (error) {
-                console.error('Erro na requisição:', error);
-            }
-        });
-
-        // 5. FAZER LOGOUT
-        logoutBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            localStorage.removeItem('jwt_token');
-            alert('Você foi desconectado.');
-            window.location.href = 'registrar.html';
-        });
-
-        // --- FUNÇÕES AUXILIARES PARA CARREGAR DROPDOWNS ---
+        // FUNÇÕES PARA CARREGAR BARBEIROS E SERVIÇOS
         async function carregarBarbeiros() {
+            const selectBarbeiros = document.getElementById('barbeiro');
             try {
-                // CORREÇÃO: Limpa o menu antes de adicionar novos itens
                 selectBarbeiros.innerHTML = '<option value="">Selecione um barbeiro...</option>';
-
                 const response = await fetch(`${API_URL}/api/dados/barbeiros`);
                 if (!response.ok) throw new Error('Erro ao buscar barbeiros!');
                 const barbeiros = await response.json();
@@ -400,10 +331,9 @@
         }
 
         async function carregarServicos() {
+            const selectServicos = document.getElementById('servico');
             try {
-                // CORREÇÃO: Limpa o menu antes de adicionar novos itens
                 selectServicos.innerHTML = '<option value="">Selecione um serviço...</option>';
-                
                 const response = await fetch(`${API_URL}/api/dados/servicos`);
                 if (!response.ok) throw new Error(`Erro HTTP! Status: ${response.status}`);
                 const servicos = await response.json();
@@ -419,20 +349,95 @@
             }
         }
 
-        // --- INICIALIZAÇÃO DA PÁGINA ---
+
+        // --- INICIALIZAÇÃO DA PÁGINA (CÓDIGO QUE RODA APÓS O CARREGAMENTO) ---
         window.onload = () => {
+            // Primeiro, verifica o login
             verificarLogin();
+
+            // Depois, carrega os dados
             carregarAgendamentos();
             carregarBarbeiros();
             carregarServicos();
+
+            // Agora, seleciona os elementos e adiciona os "ouvintes" de eventos
+            const form = document.getElementById('form-agendamento');
+            const divListaAgendamentos = document.getElementById('lista-agendamentos');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // 3. REMOVER (DELETE) UM AGENDAMENTO
+            divListaAgendamentos.addEventListener('click', async function (e) {
+                if (e.target.classList.contains('btn-remover')) {
+                    const agendamentoId = e.target.dataset.id;
+                    if (confirm('Tem certeza que deseja remover este agendamento?')) {
+                        try {
+                            const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
+                                method: 'DELETE',
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            if (response.ok) {
+                                alert('Agendamento removido com sucesso!');
+                                carregarAgendamentos();
+                            } else {
+                                alert('Erro ao remover o agendamento.');
+                            }
+                        } catch (error) {
+                            console.error('Erro na remoção:', error);
+                        }
+                    }
+                }
+            });
+
+            // 4. CRIAR (CREATE) UM NOVO AGENDAMENTO
+            form.addEventListener("submit", async function (e) {
+                e.preventDefault();
+                const dadosAgendamento = {
+                    idBarbeiro: document.getElementById('barbeiro').value,
+                    idServico: document.getElementById('servico').value,
+                    dataHora: document.getElementById("data").value
+                };
+
+                try {
+                    const response = await fetch(`${API_URL}/agendamentos`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(dadosAgendamento)
+                    });
+                    if (response.ok) {
+                        alert(`Agendamento realizado com sucesso!`);
+                        form.reset();
+                        carregarAgendamentos();
+                    } else {
+                        alert(`Erro ao agendar: Verifique se todos os campos foram preenchidos.`);
+                    }
+                } catch (error) {
+                    console.error('Erro na requisição:', error);
+                }
+            });
+            
+            // 5. FAZER LOGOUT
+            if(logoutBtn) { // Adicionada verificação de segurança
+                logoutBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    localStorage.removeItem('jwt_token');
+                    alert('Você foi desconectado.');
+                    window.location.href = 'registrar.html';
+                });
+            }
         };
     </script>
+    </html>
+
     <footer>
         &copy; 2025 BarberPro - Todos os direitos reservados.
     </footer>
 
     <script src="menu.js"></script> </body>
     </html>
+
 </body>
 
 </html>
