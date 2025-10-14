@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Administrador | BarberPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos copiados do seu registrar.html para consistência */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background-color: #0c0c0c; color: #e0e0e0; min-height: 100vh; display: flex; justify-content: center; align-items: center; position: relative; }
+    video#video-bg { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -2; object-fit: cover; opacity: 0.2; }
+    .container { background: rgba(26, 26, 26, 0.7); padding: 40px 30px; border-radius: 15px; backdrop-filter: blur(5px); box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5); border: 1px solid #333; width: 380px; text-align: center; z-index: 10; }
+    h2 { color: #ff9900; margin-bottom: 10px; font-weight: 500; font-size: 2rem; }
+    p { margin-bottom: 30px; color: #a0a0a0; font-weight: 300; }
+    .input-group { margin-bottom: 20px; text-align: left; }
+    label { display: block; font-size: 1rem; margin-bottom: 8px; color: #a0a0a0; }
+    input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background-color: #222; color: #e0e0e0; font-size: 1rem; transition: border-color 0.3s ease; }
+    input:focus { outline: none; border-color: #ff9900; }
+    .btn { width: 100%; padding: 15px; border: 2px solid #ff9900; background-color: transparent; color: #ff9900; font-weight: 600; font-size: 1.1rem; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; margin-top: 10px; }
+    .btn:hover { background-color: #ff9900; color: #0c0c0c; }
+  </style>
+</head>
+<body>
+  <video autoplay muted loop id="video-bg">
+    <source src="imagens/2319-157183741_tiny.mp4" type="video/mp4">
+  </video>
+  <div class="container">
+    <h2>Acesso Administrativo</h2>
+    <p>Faça login para gerenciar o sistema</p>
+    <form id="form-login-admin">
+      <div class="input-group">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" value="admin@barberpro.com" required>
+      </div>
+      <div class="input-group">
+        <label for="login-senha">Senha</label>
+        <input type="password" id="login-senha" required>
+      </div>
+      <button type="submit" class="btn">Entrar</button>
+    </form>
+  </div>
+  <script>
+    const API_URL = "https://barberpro-api-1o2y.onrender.com"; // Verifique se esta é a URL da sua API
+    const formLogin = document.getElementById('form-login-admin');
+
+    formLogin.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const dadosLogin = {
+        email: document.getElementById('login-email').value,
+        senha: document.getElementById('login-senha').value
+      };
+      try {
+        // MUITO IMPORTANTE: A URL aqui pode ser a mesma do login do cliente
+        const response = await fetch(`${API_URL}/login`, { 
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dadosLogin)
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // MUITO IMPORTANTE: Salva o token com o nome que a página admin espera
+          localStorage.setItem('jwt_admin_token', data.token); 
+          alert('Login de administrador bem-sucedido!');
+          // MUITO IMPORTANTE: Redireciona para a página de administração
+          window.location.href = 'administrador.html'; 
+        } else {
+          alert('Falha no login. Verifique suas credenciais.');
+        }
+      } catch (error) {
+        console.error('Erro no login:', error);
+        alert('Erro de comunicação com o servidor.');
+      }
+    });
+  </script>
+</body>
+</html>
