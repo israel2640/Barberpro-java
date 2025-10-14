@@ -9,8 +9,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder; // <-- AÑADIR IMPORT
-import org.springframework.security.crypto.password.PasswordEncoder; // <-- AÑADIR IMPORT
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -26,9 +26,26 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
+                    
                     req.requestMatchers(HttpMethod.POST, "/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/clientes").permitAll();
                     req.requestMatchers("/api/dados/**").permitAll();
+
+                    
+                    
+                    req.requestMatchers(HttpMethod.POST, "/login/barbeiro").permitAll();
+
+                    
+                    req.requestMatchers("/barbeiro/**").hasRole("BARBER");
+
+                    
+                    req.requestMatchers(HttpMethod.PATCH, "/agendamentos/**/concluir").hasRole("BARBER");
+
+                    
+                    req.requestMatchers(HttpMethod.DELETE, "/agendamentos/**").hasAnyRole("USER", "BARBER");
+                    
+
+                    
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
@@ -40,11 +57,8 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    // --- MÉTODO AÑADIDO PARA RESOLVER EL ERROR ---
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    // ------------------------------------------
-
 }

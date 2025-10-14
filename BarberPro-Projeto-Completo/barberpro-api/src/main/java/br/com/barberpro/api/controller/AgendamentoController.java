@@ -2,8 +2,9 @@ package br.com.barberpro.api.controller;
 
 import br.com.barberpro.api.domain.Agendamento;
 import br.com.barberpro.api.domain.Cliente;
+import br.com.barberpro.api.domain.enums.AgendamentoStatus;
 import br.com.barberpro.api.dto.DadosAgendamento;
-import br.com.barberpro.api.dto.DadosDetalhamentoAgendamento; // Importe o DTO de resposta
+import br.com.barberpro.api.dto.DadosDetalhamentoAgendamento;
 import br.com.barberpro.api.repository.AgendamentoRepository;
 import br.com.barberpro.api.repository.BarbeiroRepository;
 import br.com.barberpro.api.repository.ServicoRepository;
@@ -31,35 +32,24 @@ public class AgendamentoController {
 
     @GetMapping
     public ResponseEntity<List<DadosDetalhamentoAgendamento>> listar(@AuthenticationPrincipal Cliente clienteLogado) {
-
         var agendamentos = agendamentoRepository.findAllByCliente(clienteLogado);
-
-
         var agendamentosDTO = agendamentos.stream()
                 .map(DadosDetalhamentoAgendamento::new)
                 .toList();
-
-
         return ResponseEntity.ok(agendamentosDTO);
     }
 
     @PostMapping
     @Transactional
     public ResponseEntity<DadosDetalhamentoAgendamento> criar(@AuthenticationPrincipal Cliente clienteLogado, @RequestBody @Valid DadosAgendamento dados) {
-
         var barbeiro = barbeiroRepository.findById(dados.idBarbeiro()).orElseThrow();
         var servico = servicoRepository.findById(dados.idServico()).orElseThrow();
 
-
-        var agendamento = new Agendamento(null, dados.dataHora(), clienteLogado, barbeiro, servico);
-
+        var agendamento = new Agendamento(null, dados.dataHora(), AgendamentoStatus.AGENDADO, clienteLogado, barbeiro, servico);
 
         agendamentoRepository.save(agendamento);
 
-
         var dto = new DadosDetalhamentoAgendamento(agendamento);
-
-
         return ResponseEntity.ok(dto);
     }
 
@@ -70,6 +60,18 @@ public class AgendamentoController {
             return ResponseEntity.notFound().build();
         }
         agendamentoRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/concluir")
+    @Transactional
+    public ResponseEntity<Void> concluir(@PathVariable Long id) {
+        var agendamento = agendamentoRepository.findById(id).orElse(null);
+        if (agendamento == null) {
+            return ResponseEntity.notFound().build();
+        }
+        agendamento.setStatus(AgendamentoStatus.CONCLUIDO);
+        agendamentoRepository.save(agendamento);
         return ResponseEntity.noContent().build();
     }
 }
