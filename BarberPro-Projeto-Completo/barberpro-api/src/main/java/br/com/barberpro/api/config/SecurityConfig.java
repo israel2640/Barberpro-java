@@ -26,7 +26,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
-                .cors(withDefaults()) // <-- 2. ADICIONE ESTA LINHA PARA ATIVAR O CORS
+                .cors(withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> {
                     // Rotas públicas
@@ -37,7 +37,8 @@ public class SecurityConfig {
 
                     // Rotas do Barbeiro
                     req.requestMatchers("/barbeiro/**").hasRole("BARBER");
-                    req.requestMatchers(HttpMethod.PATCH, "/agendamentos/**/concluir").hasRole("BARBER");
+
+                    req.requestMatchers(HttpMethod.PATCH, "/agendamentos/*/concluir").hasRole("BARBER");
 
                     // Rota de deletar agendamento para Cliente ou Barbeiro
                     req.requestMatchers(HttpMethod.DELETE, "/agendamentos/**").hasAnyRole("USER", "BARBER");
