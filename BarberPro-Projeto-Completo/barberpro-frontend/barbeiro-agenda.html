@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Agenda | BarberPro</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="responsive.css">
+
+    <style>
+        /* Reset e Estilos Gerais (Consistente com outras páginas) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0c0c0c;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Navegação (Consistente com outras páginas) */
+        nav {
+            width: 100%;
+            background-color: rgba(12, 12, 12, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        nav .logo {
+            color: #ff9900;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: #a0a0a0;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ff9900;
+        }
+
+        /* Título da Página */
+        .page-title {
+            font-size: 2.5rem;
+            color: #ff9900;
+            margin: 40px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Lista de Agendamentos do Barbeiro */
+        .agenda-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .agendamento-card {
+            background-color: #1a1a1a;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid #ff9900;
+            transition: transform 0.3s ease;
+        }
+        
+        .agendamento-card:hover {
+            transform: scale(1.02);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .card-header h3 {
+            color: #e0e0e0;
+            font-size: 1.4rem;
+        }
+
+        .card-header .preco {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #4CAF50; /* Verde para destacar o valor */
+        }
+        
+        .card-body p {
+            margin: 8px 0;
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+        
+        .card-body strong {
+            color: #e0e0e0;
+        }
+
+        .card-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+        
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-concluir {
+            background-color: #4CAF50;
+            color: white;
+            border: 2px solid #4CAF50;
+        }
+
+        .btn-concluir:hover {
+            background-color: transparent;
+            color: #4CAF50;
+        }
+
+        .btn-cancelar {
+            background-color: #d9534f;
+            color: white;
+            border: 2px solid #d9534f;
+        }
+        
+        .btn-cancelar:hover {
+            background-color: transparent;
+            color: #d9534f;
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo">BarberPro</div>
+        <button class="hamburger-menu" aria-label="Abrir menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+        <ul>
+            <li><a href="barbeiro-agenda.html">Minha Agenda</a></li>
+            <li><a href="#" id="logout-btn" title="Sair"><i class="fas fa-sign-out-alt"></i> Sair</a></li>
+        </ul>
+    </nav>
+    
+    <div class="agenda-container">
+        <h1 class="page-title">Meus Agendamentos</h1>
+        <div id="lista-agenda">
+            </div>
+    </div>
+
+    <footer>
+        &copy; 2025 BarberPro - Todos os direitos reservados.
+    </footer>
+
+    <script src="menu.js"></script> 
+    <script>
+        // --- CONFIGURAÇÃO E LÓGICA DA PÁGINA ---
+
+        const API_URL = "https://barberpro-api-1o2y.onrender.com";
+        // O token do barbeiro deve ser salvo no localStorage após um login específico para ele.
+        const token = localStorage.getItem('jwt_barber_token'); 
+        
+        // 1. VERIFICA SE O BARBEIRO ESTÁ LOGADO
+        function verificarLoginBarbeiro() {
+            if (!token) {
+                alert('Acesso negado. Por favor, faça o login como barbeiro.');
+                // Você precisará criar uma página de login para o barbeiro
+                window.location.href = 'login-barbeiro.html'; 
+            }
+        }
+        
+        // 2. CARREGA E EXIBE OS AGENDAMENTOS
+        async function carregarAgenda() {
+            const divListaAgenda = document.getElementById('lista-agenda');
+            if (!divListaAgenda) return;
+
+            try {
+                // Este endpoint precisa ser criado na sua API
+                const response = await fetch(`${API_URL}/barbeiro/agendamentos`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error('Falha ao carregar agendamentos.');
+
+                const agendamentos = await response.json();
+                divListaAgenda.innerHTML = '';
+
+                if (agendamentos.length === 0) {
+                    divListaAgenda.innerHTML = '<p style="text-align:center; color:#a0a0a0; font-size: 1.2rem;">Você não tem horários agendados.</p>';
+                    return;
+                }
+
+                agendamentos.forEach(ag => {
+                    const data = new Date(ag.dataHora);
+                    const dataFormatada = data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                    const cardHTML = `
+                        <div class="agendamento-card" id="agendamento-${ag.id}">
+                            <div class="card-header">
+                                <h3>${ag.nomeServico}</h3>
+                                <span class="preco">R$ ${ag.precoServico.toFixed(2)}</span>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Cliente:</strong> ${ag.nomeCliente}</p>
+                                <p><strong>Data:</strong> ${dataFormatada}</p>
+                                <p><strong>Hora:</strong> ${horaFormatada}</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-action btn-concluir" data-id="${ag.id}">Marcar como Concluído</button>
+                                <button class="btn-action btn-cancelar" data-id="${ag.id}">Cancelar Agendamento</button>
+                            </div>
+                        </div>
+                    `;
+                    divListaAgenda.innerHTML += cardHTML;
+                });
+
+            } catch (error) {
+                console.error(error);
+                divListaAgenda.innerHTML = '<p style="color:red; text-align:center;">Ocorreu um erro ao buscar seus agendamentos.</p>';
+            }
+        }
+
+        // 3. LÓGICA DOS BOTÕES DE AÇÃO (EVENT DELEGATION)
+        document.getElementById('lista-agenda').addEventListener('click', async function(e) {
+            const target = e.target;
+            const agendamentoId = target.dataset.id;
+
+            if (!agendamentoId) return;
+
+            // Ação de CONCLUIR
+            if (target.classList.contains('btn-concluir')) {
+                if (confirm('Deseja marcar este serviço como concluído?')) {
+                    try {
+                        // Você precisará criar este endpoint no seu backend
+                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}/concluir`, {
+                            method: 'PATCH', // PATCH é ideal para atualizações parciais
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (response.ok) {
+                            alert('Serviço marcado como concluído!');
+                            document.getElementById(`agendamento-${agendamentoId}`).style.display = 'none'; // Esconde o card
+                        } else {
+                            alert('Erro ao concluir o serviço.');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao concluir:', error);
+                    }
+                }
+            }
+
+            // Ação de CANCELAR
+            if (target.classList.contains('btn-cancelar')) {
+                if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
+                    try {
+                        // Reutiliza o endpoint de deleção existente
+                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (response.ok) {
+                            alert('Agendamento cancelado com sucesso!');
+                            document.getElementById(`agendamento-${agendamentoId}`).style.display = 'none'; // Esconde o card
+                        } else {
+                            alert('Erro ao cancelar o agendamento.');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao cancelar:', error);
+                    }
+                }
+            }
+        });
+
+        // --- INICIALIZAÇÃO DA PÁGINA ---
+        window.onload = () => {
+            verificarLoginBarbeiro();
+            carregarAgenda();
+
+            const logoutBtn = document.getElementById('logout-btn');
+            if(logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('jwt_barber_token');
+                    alert('Você foi desconectado.');
+                    window.location.href = 'index.html';
+                });
+            }
+        };
+
+    </script>
+</body>
+
+</html>
