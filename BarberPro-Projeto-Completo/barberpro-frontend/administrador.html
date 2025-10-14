@@ -465,11 +465,12 @@
       const id = document.getElementById('barbeiro-id').value;
       const nome = document.getElementById('barbeiro-nome').value;
       const email = document.getElementById('barbeiro-email').value;
+      const senha = document.getElementById('barbeiro-senha').value; // Captura a senha
 
       const metodo = id ? 'PUT' : 'POST';
       const url = id ? `${API_URL}/admin/barbeiros/${id}` : `${API_URL}/admin/barbeiros`;
 
-      const dados = { nome, email }; // <--- Note que este objeto antigo não tem a senha
+      const dados = { nome, email, senha }; // Envia a senha para a API
 
       try {
         const response = await fetch(url, {
