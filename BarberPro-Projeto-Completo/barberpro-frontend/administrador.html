@@ -208,6 +208,39 @@
       font-size: 0.9rem;
       padding: 20px 0;
     }
+
+    /* ============================================= */
+    /* ESTILOS RESPONSIVOS PARA O PAINEL ADMIN       */
+    /* ============================================= */
+    @media (max-width: 768px) {
+      .page-title {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 1.5rem;
+      }
+      /* Força a tabela a não ultrapassar a tela */
+      .table-wrapper {
+        overflow-x: auto;
+      }
+      th, td {
+        padding: 10px 8px;
+        font-size: 0.85rem;
+        white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+      }
+      .btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+      /* Esconde colunas menos importantes em telas pequenas */
+      #tabela-usuarios th:nth-child(1), 
+      #tabela-usuarios td:nth-child(1),
+      #tabela-barbeiros th:nth-child(1), 
+      #tabela-barbeiros td:nth-child(1) {
+        display: none; /* Esconde a coluna de ID */
+      }
+    }
+
   </style>
 </head>
 

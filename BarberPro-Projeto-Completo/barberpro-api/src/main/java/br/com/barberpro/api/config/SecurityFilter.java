@@ -1,13 +1,14 @@
 package br.com.barberpro.api.config;
 
-import br.com.barberpro.api.repository.ClienteRepository;
+// 1. IMPORTE O SERVIÇO DE AUTENTICAÇÃO
+import br.com.barberpro.api.service.AuthenticationService; 
 import br.com.barberpro.api.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull; // <-- 1. IMPORTAÇÃO ADICIONADA
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,11 +23,11 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
 
+    // 2. SUBSTITUA O ClienteRepository PELO AuthenticationService
     @Autowired
-    private ClienteRepository clienteRepository;
+    private AuthenticationService authenticationService;
 
     @Override
-    // 2. ANOTAÇÕES @NonNull ADICIONADAS AOS PARÂMETROS ABAIXO
     protected void doFilterInternal(@NonNull HttpServletRequest request, 
                                     @NonNull HttpServletResponse response, 
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -35,15 +36,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (tokenJWT != null) {
             try {
                 var subject = tokenService.getSubject(tokenJWT);
-                UserDetails cliente = clienteRepository.findByEmail(subject);
 
-                if (cliente != null) {
-                    var authentication = new UsernamePasswordAuthenticationToken(cliente, null, cliente.getAuthorities());
+                // 3. USE O SERVIÇO PARA CARREGAR O USUÁRIO (SEJA ELE CLIENTE OU BARBEIRO)
+                UserDetails user = authenticationService.loadUserByUsername(subject);
 
+                if (user != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (Exception e) {
-
                 System.err.println("Erro ao validar o token JWT: " + e.getMessage());
             }
         }
