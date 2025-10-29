@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,12 +25,15 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    // A CORREÇÃO FOI FEITA AQUI, ESPECIFICANDO O TIPO DE RETORNO
     public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody DadosAutenticacao dados) {
         var token = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
-        var authentication = manager.authenticate(token);
+        Authentication authentication = manager.authenticate(token);
 
-        var tokenJWT = tokenService.gerarToken((Cliente) authentication.getPrincipal());
+        if (!(authentication.getPrincipal() instanceof Cliente cliente)) {
+            return ResponseEntity.status(401).build();
+        }
+
+        var tokenJWT = tokenService.gerarToken(cliente);
 
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }

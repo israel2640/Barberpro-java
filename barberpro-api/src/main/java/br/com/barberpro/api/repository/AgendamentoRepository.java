@@ -4,10 +4,18 @@ import br.com.barberpro.api.domain.Agendamento;
 import br.com.barberpro.api.domain.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.barberpro.api.domain.Barbeiro;
+
 import java.util.List;
+import java.util.Optional;
 
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
 
     List<Agendamento> findAllByCliente(Cliente cliente);
     List<Agendamento> findAllByBarbeiro(Barbeiro barbeiro);
+
+    long deleteByIdAndCliente_Id(Long agendamentoId, Long clienteId);
+
+    long deleteByIdAndBarbeiro_Id(Long agendamentoId, Long barbeiroId);
+
+    Optional<Agendamento> findByIdAndBarbeiro_Id(Long agendamentoId, Long barbeiroId);
 }
