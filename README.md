@@ -104,4 +104,4 @@ Siga os passos abaixo para rodar o projeto em sua máquina local.
 
 ## 👤 Autor
 
-* **Israel Paz** - *Desenvolvimento Full Stack e Documentação*
+* **Israel Paz e epuipe do curso DS da ETE Cicero Dias** - *Desenvolvimento Full Stack e Documentação*
