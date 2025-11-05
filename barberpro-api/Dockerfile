@@ -17,7 +17,7 @@ RUN mvn clean install -DskipTests
 
 # Estágio 2: Execução da aplicação
 # Usamos uma imagem leve, que contém apenas o Java 17 para rodar
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-slim
 
 # Define o diretório de trabalho
 WORKDIR /app
