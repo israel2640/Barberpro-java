@@ -1,32 +1,24 @@
-# Estágio 1: Build da aplicação com Maven
-# Usamos uma imagem que já tem o Maven e o Java 17 instalados
-FROM maven:3.8-openjdk-17 AS build
-
-# Define o diretório de trabalho dentro do container
-WORKDIR /app
-
-# Copia o arquivo de configuração do Maven para baixar as dependências
-COPY pom.xml .
-
-# Copia o restante do código-fonte da API
-COPY src ./src
-
-# Executa o comando do Maven para compilar e empacotar a aplicação em um .jar
-# O -DskipTests pula a execução de testes para acelerar o build
-RUN mvn clean install -DskipTests
-
-# Estágio 2: Execução da aplicação
-# Usamos uma imagem leve, que contém apenas o Java 17 para rodar
-FROM amazoncorretto:17-jre-slim
+# Estágio Único: Construir e Rodar
+# Sabemos que o Render consegue baixar esta imagem!
+FROM maven:3.8-openjdk-17
 
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Copia o arquivo .jar que foi gerado no estágio de build
-COPY --from=build /app/target/api-0.0.1-SNAPSHOT.jar .
+# Copia o 'plano' do projeto
+COPY pom.xml .
 
-# Expõe a porta 8080, que é a porta padrão do Spring Boot
+# Copia todo o código-fonte
+COPY src ./src
+
+# Constrói a aplicação. O JAR será criado em /app/target/
+# Usamos -DskipTests para acelerar o build no Render
+RUN mvn clean package -DskipTests
+
+# Expõe a porta que o Spring Boot usa
 EXPOSE 8080
 
-# Comando para iniciar a aplicação quando o container for executado
-ENTRYPOINT ["java", "-jar", "api-0.0.1-SNAPSHOT.jar"]
+# Comando para rodar a aplicação quando o container iniciar
+# ATENÇÃO: Verifique se o nome do seu .jar é exatamente este.
+# Este é o nome padrão do Spring Boot.
+ENTRYPOINT ["java", "-jar", "target/api-0.0.1-SNAPSHOT.jar"]
