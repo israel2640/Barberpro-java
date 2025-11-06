@@ -275,7 +275,6 @@
     }
 
     async function carregarAgendamentos() {
-        // 1. Pegue as DUAS divs
         const divListaAtivos = document.getElementById('lista-agendamentos-ativos');
         const divListaConcluidos = document.getElementById('lista-agendamentos-concluidos');
         
@@ -287,16 +286,15 @@
 
             const agendamentos = await response.json();
             
-            // 2. Limpe AMBAS as listas
             divListaAtivos.innerHTML = '';
             divListaConcluidos.innerHTML = '';
 
             if (agendamentos.length === 0) {
-                divListaAtivos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui agendamentos.</p>';
+                divListaAtivos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui próximos agendamentos.</p>';
+                divListaConcluidos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Seu histórico está vazio.</p>';
                 return;
             }
-
-            // Contadores para saber se as listas estão vazias
+            
             let ativosCount = 0;
             let concluidosCount = 0;
 
@@ -321,8 +319,7 @@
                     ${botaoRemover}
                 </div>
                 `;
-
-                // 3. Decida em qual DIV o card deve entrar
+                
                 if (isConcluido) {
                     divListaConcluidos.innerHTML += agendamentoHTML;
                     concluidosCount++;
@@ -331,8 +328,7 @@
                     ativosCount++;
                 }
             });
-
-            // 4. Adiciona mensagens se as listas ficarem vazias
+            
             if (ativosCount === 0) {
                  divListaAtivos.innerHTML = '<p style="text-align:center; color:#a0a0a0;">Você não possui próximos agendamentos.</p>';
             }
@@ -388,7 +384,7 @@
         setInterval(carregarAgendamentos, 30000);
     }
 
-window.onload = () => {
+    window.onload = () => {
         verificarLogin();
 
         carregarAgendamentos();
@@ -465,6 +461,8 @@ window.onload = () => {
                     alert(`Agendamento realizado com sucesso!`);
                     form.reset();
                     carregarAgendamentos();
+                } else if (response.status === 409) {
+                    alert('Erro: Este barbeiro já possui um agendamento neste horário. Por favor, escolha outro.');
                 } else {
                     alert(`Erro ao agendar: Verifique se todos os campos foram preenchidos.`);
                 }

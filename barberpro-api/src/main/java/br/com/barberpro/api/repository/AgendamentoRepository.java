@@ -6,6 +6,7 @@ import br.com.barberpro.api.domain.Barbeiro;
 import br.com.barberpro.api.domain.enums.AgendamentoStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,4 +24,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     long deleteAllByClienteAndStatus(Cliente cliente, AgendamentoStatus status);
     
     long deleteAllByBarbeiroAndStatus(Barbeiro barbeiro, AgendamentoStatus status);
+
+    boolean existsByBarbeiroAndDataHora(Barbeiro barbeiro, LocalDateTime dataHora);
 }

@@ -48,6 +48,10 @@ public class AgendamentoController {
         var barbeiro = barbeiroRepository.findById(dados.idBarbeiro()).orElseThrow();
         var servico = servicoRepository.findById(dados.idServico()).orElseThrow();
 
+        if (agendamentoRepository.existsByBarbeiroAndDataHora(barbeiro, dados.dataHora())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
         var agendamento = new Agendamento(null, dados.dataHora(), AgendamentoStatus.AGENDADO, clienteLogado, barbeiro, servico);
 
         agendamentoRepository.save(agendamento);
