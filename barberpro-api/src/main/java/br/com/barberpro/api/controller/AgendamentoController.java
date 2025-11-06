@@ -59,15 +59,15 @@ public class AgendamentoController {
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> remover(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        
+
         long deleteCount = 0;
 
         if (userDetails instanceof Cliente cliente) {
             deleteCount = agendamentoRepository.deleteByIdAndCliente_Id(id, cliente.getId());
-        
+
         } else if (userDetails instanceof Barbeiro barbeiro) {
             deleteCount = agendamentoRepository.deleteByIdAndBarbeiro_Id(id, barbeiro.getId());
-        
+
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -82,17 +82,24 @@ public class AgendamentoController {
     @PatchMapping("/{id}/concluir")
     @Transactional
     public ResponseEntity<Void> concluir(@PathVariable Long id, @AuthenticationPrincipal Barbeiro barbeiroLogado) {
-        
+
         var agendamentoOptional = agendamentoRepository.findByIdAndBarbeiro_Id(id, barbeiroLogado.getId());
 
         if (agendamentoOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        
+
         var agendamento = agendamentoOptional.get();
         agendamento.setStatus(AgendamentoStatus.CONCLUIDO);
         agendamentoRepository.save(agendamento);
-        
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/historico")
+    @Transactional
+    public ResponseEntity<Void> limparHistorico(@AuthenticationPrincipal Cliente clienteLogado) {
+        agendamentoRepository.deleteAllByClienteAndStatus(clienteLogado, AgendamentoStatus.CONCLUIDO);
         return ResponseEntity.noContent().build();
     }
 }

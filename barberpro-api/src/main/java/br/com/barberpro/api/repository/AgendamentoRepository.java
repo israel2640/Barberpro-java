@@ -2,8 +2,9 @@ package br.com.barberpro.api.repository;
 
 import br.com.barberpro.api.domain.Agendamento;
 import br.com.barberpro.api.domain.Cliente;
-import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.barberpro.api.domain.Barbeiro;
+import br.com.barberpro.api.domain.enums.AgendamentoStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     long deleteByIdAndBarbeiro_Id(Long agendamentoId, Long barbeiroId);
 
     Optional<Agendamento> findByIdAndBarbeiro_Id(Long agendamentoId, Long barbeiroId);
+
+    long deleteAllByClienteAndStatus(Cliente cliente, AgendamentoStatus status);
 }

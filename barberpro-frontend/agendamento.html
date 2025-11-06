@@ -253,15 +253,16 @@
     </form>
 
     <div class="agendamentos-lista">
-                    <h2 class="page-title" style="margin-top: 0;">Próximos Agendamentos</h2>
-            <div id="lista-agendamentos-ativos">
-                        </div>
+            <h2 class="page-title" style="margin-top: 0;">Próximos Agendamentos</h2>
+            <div id="lista-agendamentos-ativos">
+                </div>
 
-                    <h2 class="page-title" style="margin-top: 40px;">Histórico</h2>
-            <div id="lista-agendamentos-concluidos">
-                        </div>
-        </div>
+            <h2 class="page-title" style="margin-top: 40px;">Histórico</h2>
+            <div id="lista-agendamentos-concluidos">
+                </div>
 
+            <button id="btn-limpar-historico" class="btn-remover" style="margin: 20px auto; display: block;">Limpar Histórico</button>
+        </div>
 <script>
     const API_URL = "https://barberpro-api-1o2y.onrender.com";
     const token = localStorage.getItem('jwt_token');
@@ -387,7 +388,7 @@
         setInterval(carregarAgendamentos, 30000);
     }
 
-    window.onload = () => {
+window.onload = () => {
         verificarLogin();
 
         carregarAgendamentos();
@@ -397,8 +398,29 @@
         iniciarPolling();
 
         const form = document.getElementById('form-agendamento');
-        const divListaAgendamentos = document.getElementById('lista-agendamentos');
+        const divListaAgendamentos = document.getElementById('lista-agendamentos-ativos');
         const logoutBtn = document.getElementById('logout-btn');
+        const btnLimpar = document.getElementById('btn-limpar-historico');
+
+        btnLimpar.addEventListener('click', async function() {
+            if (confirm('Tem certeza que deseja limpar todo o histórico de agendamentos concluídos?')) {
+                try {
+                    const response = await fetch(`${API_URL}/agendamentos/historico`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+        
+                    if (response.ok) {
+                        alert('Histórico limpo com sucesso!');
+                        carregarAgendamentos();
+                    } else {
+                        alert('Erro ao limpar o histórico.');
+                    }
+                } catch (error) {
+                    console.error('Erro ao limpar histórico:', error);
+                }
+            }
+        });
 
         divListaAgendamentos.addEventListener('click', async function (e) {
             if (e.target.classList.contains('btn-remover')) {
