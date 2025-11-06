@@ -273,20 +273,23 @@
     <h1 class="page-title">Painel de Administração</h1>
 
     <h2 class="subtitle">Agendamentos</h2>
-    <table id="tabela-agendamentos">
-      <thead>
-        <tr>
-          <th>Cliente</th>
-          <th>Barbeiro</th>
-          <th>Serviço</th>
-          <th>Preço</th>
-          <th>Data</th>
-          <th>Hora</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table id="tabela-agendamentos">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Barbeiro</th>
+            <th>Serviço</th>
+            <th>Preço</th>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
 
     <h2 class="subtitle">Gerenciar Usuários</h2>
     <div class="form-container">
@@ -299,49 +302,51 @@
         <button type="submit" class="btn btn-adicionar">Salvar Usuário</button>
       </form>
     </div>
-    <table id="tabela-usuarios">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nome</th>
-          <th>Email</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="table-wrapper">
+      <table id="tabela-usuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
 
     <h2 class="subtitle">Gerenciar Barbeiros</h2>
-        <div class="form-container">
-          <h3>Adicionar/Editar Barbeiro</h3>
-          <form id="form-barbeiro">
-            <input type="hidden" id="barbeiro-id">
-            <input type="text" id="barbeiro-nome" placeholder="Nome do barbeiro" required>
-            <input type="email" id="barbeiro-email" placeholder="Email do barbeiro" required>
-            <input type="password" id="barbeiro-senha" placeholder="Senha do barbeiro" required>
-            <button type="submit" class="btn btn-adicionar">Salvar Barbeiro</button>
-          </form>
-        </div>
-        <table id="tabela-barbeiros">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-      </div>
+    <div class="form-container">
+      <h3>Adicionar/Editar Barbeiro</h3>
+      <form id="form-barbeiro">
+        <input type="hidden" id="barbeiro-id">
+        <input type="text" id="barbeiro-nome" placeholder="Nome do barbeiro" required>
+        <input type="email" id="barbeiro-email" placeholder="Email do barbeiro" required>
+        <input type="password" id="barbeiro-senha" placeholder="Senha do barbeiro" required>
+        <button type="submit" class="btn btn-adicionar">Salvar Barbeiro</button>
+      </form>
+    </div>
+    <div class="table-wrapper">
+      <table id="tabela-barbeiros">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
   <script>
-    // --- CONFIGURAÇÃO E ELEMENTOS GLOBAIS ---
-    // API URL e token são placeholders. Você deve configurar de acordo com seu backend.
     const API_URL = "https://barberpro-api-1o2y.onrender.com";
-    const adminToken = localStorage.getItem('jwt_admin_token'); // Exemplo de token de administrador
+    const adminToken = localStorage.getItem('jwt_admin_token');
 
     const tabelaAgendamentos = document.getElementById('tabela-agendamentos').getElementsByTagName('tbody')[0];
     const tabelaUsuarios = document.getElementById('tabela-usuarios').getElementsByTagName('tbody')[0];
@@ -351,17 +356,13 @@
     const formBarbeiro = document.getElementById('form-barbeiro');
     const logoutBtn = document.getElementById('logout-btn');
 
-    // --- LÓGICA DA APLICAÇÃO ---
-
-    // 1. VERIFICAR SE O ADMIN ESTÁ LOGADO
     function verificarLoginAdmin() {
       if (!adminToken) {
         alert('Acesso negado. Por favor, faça o login como administrador.');
-        window.location.href = 'login-admin.html'; // Exemplo de página de login para admin
+        window.location.href = 'login-admin.html';
       }
     }
 
-    // 2. CARREGAR DADOS INICIAIS
     window.onload = () => {
       verificarLoginAdmin();
       carregarAgendamentos();
@@ -369,7 +370,6 @@
       carregarBarbeiros();
     };
 
-    // --- FUNÇÕES DE CARREGAMENTO (READ) ---
     async function carregarAgendamentos() {
       try {
         const response = await fetch(`${API_URL}/admin/agendamentos`, {
@@ -379,14 +379,20 @@
         tabelaAgendamentos.innerHTML = '';
         agendamentos.forEach(ag => {
           const row = tabelaAgendamentos.insertRow();
+          
+          const isConcluido = ag.status === 'CONCLUIDO';
+          const statusTexto = isConcluido ? 'CONCLUÍDO' : 'AGENDADO';
+          const statusCor = isConcluido ? '#4CAF50' : '#ff9900';
+
           row.innerHTML = `
-          <td>${ag.nomeCliente}</td>
-          <td>${ag.nomeBarbeiro}</td>
-          <td>${ag.nomeServico}</td>
-          <td>${ag.precoServico ? `R$ ${ag.precoServico.toFixed(2)}` : 'Inválido'}</td>
-          <td>${new Date(ag.dataHora).toLocaleDateString('pt-BR')}</td>
-          <td>${new Date(ag.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</td>
-        `;
+            <td>${ag.nomeCliente}</td>
+            <td>${ag.nomeBarbeiro}</td>
+            <td>${ag.nomeServico}</td>
+            <td>${ag.precoServico ? `R$ ${ag.precoServico.toFixed(2)}` : 'Inválido'}</td>
+            <td>${new Date(ag.dataHora).toLocaleDateString('pt-BR')}</td>
+            <td>${new Date(ag.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</td>
+            <td style="color: ${statusCor}; font-weight: 600;">${statusTexto}</td>
+          `;
         });
       } catch (error) {
         console.error('Erro ao carregar agendamentos:', error);
@@ -441,7 +447,6 @@
       }
     }
 
-    // --- FUNÇÕES DE CRUD (USUÁRIOS) ---
     formUsuario.addEventListener('submit', async function (e) {
       e.preventDefault();
       const id = document.getElementById('usuario-id').value;
@@ -450,10 +455,15 @@
       const senha = document.getElementById('usuario-senha').value;
 
       const metodo = id ? 'PUT' : 'POST';
-      const url = id ? `${API_URL}/admin/usuarios/${id}` : `${API_URL}/admin/usuarios`;
+      const url = id ? `${API_URL}/admin/usuarios/${id}` : `${API_URL}/clientes`;
 
       const dados = { nome, email };
-      if (senha) dados.senha = senha;
+      
+      if (!id) {
+          dados.senha = senha;
+      } else if (senha) {
+          dados.senha = senha;
+      }
 
       try {
         const response = await fetch(url, {
@@ -464,6 +474,7 @@
         if (response.ok) {
           alert(`Usuário ${id ? 'atualizado' : 'adicionado'} com sucesso!`);
           formUsuario.reset();
+          document.getElementById('usuario-senha').placeholder = 'Senha (apenas para novos usuários)';
           carregarUsuarios();
         } else {
           alert('Erro ao salvar usuário.');
@@ -477,7 +488,9 @@
       document.getElementById('usuario-id').value = id;
       document.getElementById('usuario-nome').value = nome;
       document.getElementById('usuario-email').value = email;
-      document.getElementById('usuario-senha').placeholder = 'Deixe em branco para manter a senha atual';
+      const campoSenha = document.getElementById('usuario-senha');
+      campoSenha.value = '';
+      campoSenha.placeholder = 'Deixe em branco para manter a senha atual';
     }
 
     async function excluirUsuario(id) {
@@ -498,7 +511,6 @@
       }
     }
 
-// --- FUNÇÕES DE CRUD (BARBEIROS) ---
     formBarbeiro.addEventListener('submit', async function (e) {
       e.preventDefault();
       const id = document.getElementById('barbeiro-id').value;
@@ -510,8 +522,6 @@
       const url = id ? `${API_URL}/admin/barbeiros/${id}` : `${API_URL}/admin/barbeiros`;
 
       const dados = { nome, email };
-      // Lógica aprimorada: Só envia a senha se for um novo barbeiro (obrigatório)
-      // ou se uma nova senha foi digitada durante a edição.
       if (!id || senha) {
         dados.senha = senha;
       }
@@ -525,7 +535,6 @@
         if (response.ok) {
           alert(`Barbeiro ${id ? 'atualizado' : 'adicionado'} com sucesso!`);
           formBarbeiro.reset();
-          // Garante que o placeholder e a obrigatoriedade da senha voltem ao normal após salvar
           const campoSenha = document.getElementById('barbeiro-senha');
           campoSenha.placeholder = "Senha do barbeiro";
           campoSenha.required = true;
@@ -538,16 +547,15 @@
       }
     });
 
-    // Esta função foi atualizada para melhorar a experiência de edição
     function preencherFormBarbeiro(id, nome, email) {
       document.getElementById('barbeiro-id').value = id;
       document.getElementById('barbeiro-nome').value = nome;
       document.getElementById('barbeiro-email').value = email;
       
       const campoSenha = document.getElementById('barbeiro-senha');
-      campoSenha.value = ''; // Limpa o campo de senha
-      campoSenha.placeholder = 'Deixe em branco para não alterar a senha'; // Informa o admin
-      campoSenha.required = false; // Senha não é obrigatória ao editar
+      campoSenha.value = '';
+      campoSenha.placeholder = 'Deixe em branco para não alterar a senha';
+      campoSenha.required = false;
     }
 
     async function excluirBarbeiro(id) {
@@ -568,7 +576,6 @@
       }
     }
 
-    // --- LOGOUT ---
     logoutBtn.addEventListener('click', function (e) {
       e.preventDefault();
       localStorage.removeItem('jwt_admin_token');
