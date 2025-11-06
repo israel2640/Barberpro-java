@@ -21,4 +21,6 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     Optional<Agendamento> findByIdAndBarbeiro_Id(Long agendamentoId, Long barbeiroId);
 
     long deleteAllByClienteAndStatus(Cliente cliente, AgendamentoStatus status);
+    
+    long deleteAllByBarbeiroAndStatus(Barbeiro barbeiro, AgendamentoStatus status);
 }
