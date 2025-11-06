@@ -204,141 +204,138 @@
     </footer>
 
     <script src="menu.js"></script> 
-    <script>
-        // --- CONFIGURAÇÃO E LÓGICA DA PÁGINA ---
+<script>
+        const API_URL = "https://barberpro-api-1o2y.onrender.com";
+        const token = localStorage.getItem('jwt_barber_token'); 
+        
+        function verificarLoginBarbeiro() {
+            if (!token) {
+                alert('Acesso negado. Por favor, faça o login como barbeiro.');
+                window.location.href = 'login-barbeiro.html'; 
+            }
+        }
+        
+        async function carregarAgenda() {
+            const divListaAgenda = document.getElementById('lista-agenda');
+            if (!divListaAgenda) return;
 
-        const API_URL = "https://barberpro-api-1o2y.onrender.com";
-        // O token do barbeiro deve ser salvo no localStorage após um login específico para ele.
-        const token = localStorage.getItem('jwt_barber_token'); 
-        
-        // 1. VERIFICA SE O BARBEIRO ESTÁ LOGADO
-        function verificarLoginBarbeiro() {
-            if (!token) {
-                alert('Acesso negado. Por favor, faça o login como barbeiro.');
-                // Você precisará criar uma página de login para o barbeiro
-                window.location.href = 'login-barbeiro.html'; 
-            }
-        }
-        
-        // 2. CARREGA E EXIBE OS AGENDAMENTOS
-        async function carregarAgenda() {
-            const divListaAgenda = document.getElementById('lista-agenda');
-            if (!divListaAgenda) return;
+            try {
+                const response = await fetch(`${API_URL}/barbeiro/agendamentos`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
 
-            try {
-                // Este endpoint precisa ser criado na sua API
-                const response = await fetch(`${API_URL}/barbeiro/agendamentos`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                if (!response.ok) throw new Error('Falha ao carregar agendamentos.');
 
-                if (!response.ok) throw new Error('Falha ao carregar agendamentos.');
+                const agendamentos = await response.json();
+                divListaAgenda.innerHTML = '';
 
-                const agendamentos = await response.json();
-                divListaAgenda.innerHTML = '';
+                if (agendamentos.length === 0) {
+                    divListaAgenda.innerHTML = '<p style="text-align:center; color:#a0a0a0; font-size: 1.2rem;">Você não tem horários agendados.</p>';
+                    return;
+                }
 
-                if (agendamentos.length === 0) {
-                    divListaAgenda.innerHTML = '<p style="text-align:center; color:#a0a0a0; font-size: 1.2rem;">Você não tem horários agendados.</p>';
-                    return;
-                }
+                agendamentos.forEach(ag => {
+                    const data = new Date(ag.dataHora);
+                    const dataFormatada = data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-                agendamentos.forEach(ag => {
-                    const data = new Date(ag.dataHora);
-                    const dataFormatada = data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-                    const horaFormatada = data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const isConcluido = ag.status === 'CONCLUIDO';
+                    const statusTexto = isConcluido ? 'CONCLUÍDO' : 'AGENDADO';
+                    const statusCor = isConcluido ? '#4CAF50' : '#ff9900';
 
-                    const cardHTML = `
-                        <div class="agendamento-card" id="agendamento-${ag.id}">
-                            <div class="card-header">
-                                <h3>${ag.nomeServico}</h3>
-                                <span class="preco">R$ ${ag.precoServico.toFixed(2)}</span>
-                            </div>
-                            <div class="card-body">
-                                <p><strong>Cliente:</strong> ${ag.nomeCliente}</p>
-                                <p><strong>Data:</strong> ${dataFormatada}</p>
-                                <p><strong>Hora:</strong> ${horaFormatada}</p>
-                            </div>
-                            <div class="card-actions">
-                                <button class="btn-action btn-concluir" data-id="${ag.id}">Marcar como Concluído</button>
-                                <button class="btn-action btn-cancelar" data-id="${ag.id}">Cancelar Agendamento</button>
-                            </div>
-                        </div>
-                    `;
-                    divListaAgenda.innerHTML += cardHTML;
-                });
+                    const actionsHTML = isConcluido
+                        ? `<p style="color: ${statusCor}; font-weight: 600; text-align: right; margin-top: 10px;">Serviço Concluído</p>`
+                        : `
+                        <button class="btn-action btn-concluir" data-id="${ag.id}">Marcar como Concluído</button>
+                        <button class="btn-action btn-cancelar" data-id="${ag.id}">Cancelar Agendamento</button>
+                        `;
 
-            } catch (error) {
-                console.error(error);
-                divListaAgenda.innerHTML = '<p style="color:red; text-align:center;">Ocorreu um erro ao buscar seus agendamentos.</p>';
-            }
-        }
+                    const cardHTML = `
+                        <div class="agendamento-card" id="agendamento-${ag.id}" style="border-left-color: ${statusCor};">
+                            <div class="card-header">
+                                <h3>${ag.nomeServico}</h3>
+                                <span class="preco">R$ ${ag.precoServico.toFixed(2)}</span>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Cliente:</strong> ${ag.nomeCliente}</p>
+                                <p><strong>Data:</strong> ${dataFormatada}</p>
+                                <p><strong>Hora:</strong> ${horaFormatada}</p>
+                                <p style="color: ${statusCor}; font-weight: 600; margin-top: 10px;">Status: ${statusTexto}</p>
+                            </div>
+                            <div class="card-actions">
+                                ${actionsHTML}
+                            </div>
+                        </div>
+                    `;
+                    divListaAgenda.innerHTML += cardHTML;
+                });
 
-        // 3. LÓGICA DOS BOTÕES DE AÇÃO (EVENT DELEGATION)
-        document.getElementById('lista-agenda').addEventListener('click', async function(e) {
-            const target = e.target;
-            const agendamentoId = target.dataset.id;
+            } catch (error) {
+                console.error(error);
+                divListaAgenda.innerHTML = '<p style="color:red; text-align:center;">Ocorreu um erro ao buscar seus agendamentos.</p>';
+            }
+        }
 
-            if (!agendamentoId) return;
+        document.getElementById('lista-agenda').addEventListener('click', async function(e) {
+            const target = e.target;
+            const agendamentoId = target.dataset.id;
 
-            // Ação de CONCLUIR
-            if (target.classList.contains('btn-concluir')) {
-                if (confirm('Deseja marcar este serviço como concluído?')) {
-                    try {
-                        // Você precisará criar este endpoint no seu backend
-                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}/concluir`, {
-                            method: 'PATCH', // PATCH é ideal para atualizações parciais
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-                        if (response.ok) {
-                            alert('Serviço marcado como concluído!');
-                            document.getElementById(`agendamento-${agendamentoId}`).style.display = 'none'; // Esconde o card
-                        } else {
-                            alert('Erro ao concluir o serviço.');
-                        }
-                    } catch (error) {
-                        console.error('Erro ao concluir:', error);
-                    }
-                }
-            }
+            if (!agendamentoId) return;
 
-            // Ação de CANCELAR
-            if (target.classList.contains('btn-cancelar')) {
-                if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
-                    try {
-                        // Reutiliza o endpoint de deleção existente
-                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
-                            method: 'DELETE',
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-                        if (response.ok) {
-                            alert('Agendamento cancelado com sucesso!');
-                            document.getElementById(`agendamento-${agendamentoId}`).style.display = 'none'; // Esconde o card
-                        } else {
-                            alert('Erro ao cancelar o agendamento.');
-                        }
-                    } catch (error) {
-                        console.error('Erro ao cancelar:', error);
-                    }
-                }
-            }
-        });
+            if (target.classList.contains('btn-concluir')) {
+                if (confirm('Deseja marcar este serviço como concluído?')) {
+                    try {
+                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}/concluir`, {
+                            method: 'PATCH',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                        if (response.ok) {
+                            alert('Serviço marcado como concluído!');
+                            carregarAgenda();
+                        } else {
+                            alert('Erro ao concluir o serviço.');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao concluir:', error);
+                    }
+              _}
+            }
 
-        // --- INICIALIZAÇÃO DA PÁGINA ---
-        window.onload = () => {
-            verificarLoginBarbeiro();
-            carregarAgenda();
+            if (target.classList.contains('btn-cancelar')) {
+                if (confirm('Tem certeza que deseja cancelar este agendamento?')) {
+                    try {
+                        const response = await fetch(`${API_URL}/agendamentos/${agendamentoId}`, {
+                         method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${token}` }
+                        });
+                         if (response.ok) {
+                            alert('Agendamento cancelado com sucesso!');
+                            carregarAgenda();
+                        } else {
+                            alert('Erro ao cancelar o agendamento.');
+                       }
+                    } catch (error) {
+                        console.error('Erro ao cancelar:', error);
+                    }
+                }
+            }
+        });
 
-            const logoutBtn = document.getElementById('logout-btn');
-            if(logoutBtn) {
-                logoutBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    localStorage.removeItem('jwt_barber_token');
-                    alert('Você foi desconectado.');
-                    window.location.href = 'index.html';
-                });
-            }
-        };
+        window.onload = () => {
+            verificarLoginBarbeiro();
+           carregarAgenda();
 
-    </script>
+            const logoutBtn = document.getElementById('logout-btn');
+            if(logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('jwt_barber_token');
+                    alert('Você foi desconectado.');
+                    window.location.href = 'index.html';
+                });
+            }
+        };
+    </script>
 </body>
 
 </html>
