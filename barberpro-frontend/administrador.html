@@ -166,6 +166,28 @@
       color: #e0e0e0;
       font-size: 1rem;
     }
+
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    .password-toggle-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a0a0a0;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .form-container input {
+      padding-right: 45px;
+    }
+    .input-wrapper input {
+        margin-bottom: 0;
+    }
+
     footer {
       position: relative;
       bottom: 0;
@@ -258,7 +280,10 @@
         <input type="hidden" id="usuario-id">
         <input type="text" id="usuario-nome" placeholder="Nome do usuário" required>
         <input type="email" id="usuario-email" placeholder="Email do usuário" required>
-        <input type="password" id="usuario-senha" placeholder="Senha (apenas para novos usuários)">
+        <div class="input-wrapper">
+          <input type="password" id="usuario-senha" placeholder="Senha (apenas para novos usuários)">
+          <i class="fas fa-eye password-toggle-icon" id="toggle-usuario-senha"></i>
+        </div>
         <button type="submit" class="btn btn-adicionar">Salvar Usuário</button>
       </form>
     </div>
@@ -284,7 +309,10 @@
             <input type="hidden" id="barbeiro-id">
             <input type="text" id="barbeiro-nome" placeholder="Nome do barbeiro" required>
             <input type="email" id="barbeiro-email" placeholder="Email do barbeiro" required>
-            <input type="password" id="barbeiro-senha" placeholder="Senha do barbeiro" required>
+            <div class="input-wrapper">
+              <input type="password" id="barbeiro-senha" placeholder="Senha do barbeiro" required>
+              <i class="fas fa-eye password-toggle-icon" id="toggle-barbeiro-senha"></i>
+            </div>
             <input type="url" id="barbeiro-imagem" placeholder="URL da imagem (ex: https://.../imagem.png)">
             <button type="submit" class="btn btn-adicionar">Salvar Barbeiro</button>
           </form>
@@ -317,6 +345,19 @@
     const formBarbeiro = document.getElementById('form-barbeiro');
     const logoutBtn = document.getElementById('logout-btn');
 
+    function setupPasswordToggle(inputId, toggleId) {
+      const passwordInput = document.getElementById(inputId);
+      const toggleIcon = document.getElementById(toggleId);
+      if (passwordInput && toggleIcon) {
+        toggleIcon.addEventListener('click', function() {
+          const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+          passwordInput.setAttribute('type', type);
+          this.classList.toggle('fa-eye');
+          this.classList.toggle('fa-eye-slash');
+        });
+      }
+    }
+
     function verificarLoginAdmin() {
       if (!adminToken) {
         alert('Acesso negado. Por favor, faça o login como administrador.');
@@ -329,6 +370,9 @@
       carregarAgendamentos();
       carregarUsuarios();
       carregarBarbeiros();
+
+      setupPasswordToggle('usuario-senha', 'toggle-usuario-senha');
+      setupPasswordToggle('barbeiro-senha', 'toggle-barbeiro-senha');
     };
 
     async function carregarAgendamentos() {
@@ -369,6 +413,7 @@
         tabelaUsuarios.innerHTML = '';
         usuarios.forEach(user => {
           const row = tabelaUsuarios.insertRow();
+          const urlImagem = user.urlImagem ? user.urlImagem : '';
           row.innerHTML = `
           <td>${user.id}</td>
           <td>${user.nome}</td>
