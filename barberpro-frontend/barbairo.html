@@ -13,23 +13,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   <style>
-    /* Reset e Fontes */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
-
     body {
       background-color: #0c0c0c;
       color: #e0e0e0;
       position: relative;
       padding-top: 80px;
-      /* Espaço para o menu fixo */
     }
-
-    /* Navegação */
     nav {
       width: 100%;
       background-color: rgba(12, 12, 12, 0.8);
@@ -44,20 +39,17 @@
       z-index: 1000;
       border-bottom: 1px solid #1a1a1a;
     }
-
     nav .logo {
       color: #ff9900;
       font-size: 1.8rem;
       font-weight: 600;
     }
-
     nav ul {
       list-style: none;
       display: flex;
       gap: 30px;
       align-items: center;
     }
-
     nav ul li a {
       color: #a0a0a0;
       text-decoration: none;
@@ -67,17 +59,13 @@
       display: flex;
       align-items: center;
     }
-
     nav ul li a:hover {
       color: #ff9900;
     }
-
     nav ul li a i {
       font-size: 1.2rem;
       margin-right: 5px;
     }
-
-    /* Título da Página */
     h1 {
       font-size: 2.5rem;
       color: #ff9900;
@@ -85,8 +73,6 @@
       text-align: center;
       font-weight: 500;
     }
-
-    /* Galeria de Barbeiros */
     .gallery {
       display: flex;
       flex-wrap: wrap;
@@ -96,12 +82,10 @@
       margin: 0 auto 50px;
       padding: 0 20px;
     }
-
     .card-link {
       text-decoration: none;
       color: inherit;
     }
-
     .card {
       width: 300px;
       background-color: #1a1a1a;
@@ -110,38 +94,30 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
     .card:hover {
       transform: translateY(-10px);
       box-shadow: 0 10px 30px rgba(255, 153, 0, 0.2);
     }
-
     .card img {
       width: 100%;
       height: 350px;
-      /* Altura da imagem padronizada */
       object-fit: cover;
       display: block;
       transition: transform 0.3s ease;
     }
-
     .card:hover img {
       transform: scale(1.05);
     }
-
     .card figcaption {
       padding: 20px 10px;
       text-align: center;
     }
-
     .card h3 {
       margin: 0;
       color: #ff9900;
       font-size: 1.4rem;
       font-weight: 500;
     }
-
-    /* Rodapé */
     footer {
       position: relative;
       bottom: 0;
@@ -151,14 +127,12 @@
       font-size: 0.9rem;
       padding: 20px 0;
     }
-
     @media (max-width: 680px) {
       .gallery {
         flex-direction: column;
         align-items: center;
       }
     }
-
   </style>
 </head>
 
@@ -186,37 +160,54 @@
 
   <h1>Escolha seu barbeiro:</h1>
 
-  <div class="gallery">
-    <a href="agendamento.html" class="card-link">
-      <article class="card">
-        <figure>
-          <img src="imagens/Lucas3.png" alt="BARBEIRO LUCAS">
-          <figcaption>
-            <h3>BARBEIRO LUCAS</h3>
-          </figcaption>
-        </figure>
-      </article>
-    </a>
-
-    <a href="AGENDAMENTO.html" class="card-link">
-      <article class="card">
-        <figure>
-          <img src="imagens/pedro 1.png" alt="BARBEIRO PEDRO">
-          <figcaption>
-            <h3>BARBEIRO PEDRO</h3>
-          </figcaption>
-        </figure>
-      </article>
-    </a>
+  <div class="gallery" id="gallery-container">
+      <p style="text-align: center; font-size: 1.2rem;">Carregando barbeiros...</p>
   </div>
 
   <footer>
       &copy; 2025 BarberPro - Todos os direitos reservados. | <a href="https://barberpro-frontend.onrender.com/login-barbeiro.html" style="color: #a0a0a0;">Área do Profissional</a> | <a href="https://barberpro-frontend.onrender.com/login-admin.html" style="color: #a0a0a0;">Área do Admin</a>
     </footer>
 
-  <script src="menu.js"></script> </body>
-</html>
+  <script src="menu.js"></script> 
+  
+  <script>
+    const API_URL = "https://barberpro-api-1o2y.onrender.com";
+    const PLACEHOLDER_IMAGE = 'imagens/placeholder-barbeiro.png';
+
+    async function carregarBarbeiros() {
+        const gallery = document.getElementById('gallery-container');
+        try {
+            const response = await fetch(`${API_URL}/api/dados/barbeiros`);
+            if (!response.ok) throw new Error('Erro ao buscar barbeiros');
+
+            const barbeiros = await response.json();
+            gallery.innerHTML = ''; 
+
+            barbeiros.forEach(barbeiro => {
+                const imagemSrc = barbeiro.urlImagem ? barbeiro.urlImagem : PLACEHOLDER_IMAGE;
+
+                const cardHTML = `
+                <a href="agendamento.html" class="card-link">
+                  <article class="card">
+                    <figure>
+                      <img src="${imagemSrc}" alt="BARBEIRO ${barbeiro.nome.toUpperCase()}">
+                      <figcaption>
+                        <h3>BARBEIRO ${barbeiro.nome.toUpperCase()}</h3>
+                      </figcaption>
+                    </figure>
+                  </article>
+                </a>
+                `;
+                gallery.innerHTML += cardHTML;
+            });
+        } catch (error) {
+            console.error(error);
+            gallery.innerHTML = '<p style="color: red; text-align: center;">Erro ao carregar barbeiros.</p>';
+        }
+    }
+
+    window.onload = carregarBarbeiros;
+  </script>
   
 </body>
-
 </html>

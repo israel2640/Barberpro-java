@@ -32,14 +32,12 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // --- AGENDAMENTOS ---
     @GetMapping("/agendamentos")
     public ResponseEntity<List<DadosDetalhamentoAgendamento>> listarTodosAgendamentos() {
         List<Agendamento> agendamentos = agendamentoRepository.findAll();
         return ResponseEntity.ok(agendamentos.stream().map(DadosDetalhamentoAgendamento::new).collect(Collectors.toList()));
     }
 
-    // --- CLIENTES (USUÁRIOS) ---
     @GetMapping("/usuarios")
     public ResponseEntity<List<Cliente>> listarUsuarios() {
         return ResponseEntity.ok(clienteRepository.findAll());
@@ -64,7 +62,6 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- BARBEIROS ---
     @GetMapping("/barbeiros")
     public ResponseEntity<List<Barbeiro>> listarBarbeiros() {
         return ResponseEntity.ok(barbeiroRepository.findAll());
@@ -77,17 +74,15 @@ public class AdminController {
         return ResponseEntity.ok(barbeiroRepository.save(barbeiro));
     }
     
-    // --- MÉTODO DE EDIÇÃO DE BARBEIRO ATUALIZADO ---
     @PutMapping("/barbeiros/{id}")
     @Transactional
     public ResponseEntity<Barbeiro> editarBarbeiro(@PathVariable Long id, @RequestBody Barbeiro dados) {
         var barbeiro = barbeiroRepository.findById(id).orElseThrow(() -> new RuntimeException("Barbeiro não encontrado"));
         
-        // Atualiza nome e email
         barbeiro.setNome(dados.getNome());
         barbeiro.setEmail(dados.getEmail());
+        barbeiro.setUrlImagem(dados.getUrlImagem());
 
-        // Apenas atualiza a senha se uma nova for enviada no formulário
         if (dados.getSenha() != null && !dados.getSenha().isBlank()) {
             barbeiro.setSenha(passwordEncoder.encode(dados.getSenha()));
         }

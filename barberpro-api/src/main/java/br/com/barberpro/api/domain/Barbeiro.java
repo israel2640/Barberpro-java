@@ -1,4 +1,3 @@
-
 package br.com.barberpro.api.domain;
 
 import jakarta.persistence.*;
@@ -27,6 +26,8 @@ public class Barbeiro implements UserDetails {
     private String email;
 
     private String senha;
+
+    private String urlImagem;
 
     
     @Override

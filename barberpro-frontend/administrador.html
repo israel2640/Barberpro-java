@@ -13,23 +13,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
   <style>
-    /* Reset e Fontes */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Poppins', sans-serif;
     }
-
     body {
       background-color: #0c0c0c;
       color: #e0e0e0;
       min-height: 100vh;
       padding-top: 80px;
-      /* Espaço para o menu fixo */
     }
-
-    /* Navegação - Padrão Moderno e Minimalista */
     nav {
       width: 100%;
       background-color: rgba(12, 12, 12, 0.8);
@@ -44,20 +39,17 @@
       z-index: 1000;
       border-bottom: 1px solid #1a1a1a;
     }
-
     nav .logo {
       color: #ff9900;
       font-size: 1.8rem;
       font-weight: 600;
     }
-
     nav ul {
       list-style: none;
       display: flex;
       gap: 30px;
       align-items: center;
     }
-
     nav ul li a {
       color: #a0a0a0;
       text-decoration: none;
@@ -67,17 +59,13 @@
       display: flex;
       align-items: center;
     }
-
     nav ul li a:hover {
       color: #ff9900;
     }
-
     nav ul li a i {
       font-size: 1.2rem;
       margin-right: 5px;
     }
-
-    /* Títulos da Página */
     .page-title {
       font-size: 2.5rem;
       color: #ff9900;
@@ -85,7 +73,6 @@
       text-align: center;
       font-weight: 500;
     }
-
     .subtitle {
       font-size: 1.8rem;
       color: #e0e0e0;
@@ -93,15 +80,11 @@
       text-align: center;
       font-weight: 400;
     }
-
-    /* Layout do Container Principal */
     .admin-container {
       max-width: 1200px;
       margin: 0 auto 50px;
       padding: 0 20px;
     }
-
-    /* Tabelas e Listas */
     table {
       width: 100%;
       border-collapse: collapse;
@@ -111,24 +94,20 @@
       overflow: hidden;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
     }
-
     th,
     td {
       padding: 15px;
       text-align: left;
       border-bottom: 1px solid #333;
     }
-
     th {
       background-color: #ff9900;
       color: #0c0c0c;
       font-weight: 600;
     }
-
     tr:last-child td {
       border-bottom: none;
     }
-
     .btn {
       padding: 8px 15px;
       border-radius: 50px;
@@ -139,38 +118,30 @@
       font-size: 0.9rem;
       margin: 2px;
     }
-
     .btn-adicionar {
       background-color: #4CAF50;
       color: white;
     }
-
     .btn-adicionar:hover {
       background-color: #45a049;
       transform: scale(1.05);
     }
-
     .btn-editar {
       background-color: #2196F3;
       color: white;
     }
-
     .btn-editar:hover {
       background-color: #0b7dda;
       transform: scale(1.05);
     }
-
     .btn-excluir {
       background-color: #f44336;
       color: white;
     }
-
     .btn-excluir:hover {
       background-color: #da190b;
       transform: scale(1.05);
     }
-
-    /* Formulários de CRUD */
     .form-container {
       background: #1a1a1a;
       padding: 30px;
@@ -180,12 +151,10 @@
       max-width: 600px;
       text-align: left;
     }
-
     .form-container h3 {
       color: #ff9900;
       margin-bottom: 20px;
     }
-
     .form-container input,
     .form-container button {
       width: 100%;
@@ -197,8 +166,6 @@
       color: #e0e0e0;
       font-size: 1rem;
     }
-
-    /* Rodapé */
     footer {
       position: relative;
       bottom: 0;
@@ -208,10 +175,6 @@
       font-size: 0.9rem;
       padding: 20px 0;
     }
-
-    /* ============================================= */
-    /* ESTILOS RESPONSIVOS PARA O PAINEL ADMIN       */
-    /* ============================================= */
     @media (max-width: 768px) {
       .page-title {
         font-size: 2rem;
@@ -219,28 +182,25 @@
       .subtitle {
         font-size: 1.5rem;
       }
-      /* Força a tabela a não ultrapassar a tela */
       .table-wrapper {
         overflow-x: auto;
       }
       th, td {
         padding: 10px 8px;
         font-size: 0.85rem;
-        white-space: nowrap; /* Impede que o texto quebre em várias linhas */
+        white-space: nowrap;
       }
       .btn {
         padding: 6px 12px;
         font-size: 0.8rem;
       }
-      /* Esconde colunas menos importantes em telas pequenas */
       #tabela-usuarios th:nth-child(1), 
       #tabela-usuarios td:nth-child(1),
       #tabela-barbeiros th:nth-child(1), 
       #tabela-barbeiros td:nth-child(1) {
-        display: none; /* Esconde a coluna de ID */
+        display: none;
       }
     }
-
   </style>
 </head>
 
@@ -318,31 +278,32 @@
     </div>
 
     <h2 class="subtitle">Gerenciar Barbeiros</h2>
-    <div class="form-container">
-      <h3>Adicionar/Editar Barbeiro</h3>
-      <form id="form-barbeiro">
-        <input type="hidden" id="barbeiro-id">
-        <input type="text" id="barbeiro-nome" placeholder="Nome do barbeiro" required>
-        <input type="email" id="barbeiro-email" placeholder="Email do barbeiro" required>
-        <input type="password" id="barbeiro-senha" placeholder="Senha do barbeiro" required>
-        <button type="submit" class="btn btn-adicionar">Salvar Barbeiro</button>
-      </form>
-    </div>
-    <div class="table-wrapper">
-      <table id="tabela-barbeiros">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <div class="form-container">
+          <h3>Adicionar/Editar Barbeiro</h3>
+          <form id="form-barbeiro">
+            <input type="hidden" id="barbeiro-id">
+            <input type="text" id="barbeiro-nome" placeholder="Nome do barbeiro" required>
+            <input type="email" id="barbeiro-email" placeholder="Email do barbeiro" required>
+            <input type="password" id="barbeiro-senha" placeholder="Senha do barbeiro" required>
+            <input type="url" id="barbeiro-imagem" placeholder="URL da imagem (ex: https://.../imagem.png)">
+            <button type="submit" class="btn btn-adicionar">Salvar Barbeiro</button>
+          </form>
+        </div>
+        <div class="table-wrapper">
+          <table id="tabela-barbeiros">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
   <script>
     const API_URL = "https://barberpro-api-1o2y.onrender.com";
@@ -432,12 +393,13 @@
         tabelaBarbeiros.innerHTML = '';
         barbeiros.forEach(barb => {
           const row = tabelaBarbeiros.insertRow();
+          const urlImagem = barb.urlImagem ? barb.urlImagem : '';
           row.innerHTML = `
           <td>${barb.id}</td>
           <td>${barb.nome}</td>
           <td>${barb.email}</td>
           <td>
-            <button class="btn btn-editar" onclick="preencherFormBarbeiro(${barb.id}, '${barb.nome}', '${barb.email}')">Editar</button>
+            <button class="btn btn-editar" onclick="preencherFormBarbeiro(${barb.id}, '${barb.nome}', '${barb.email}', '${urlImagem}')">Editar</button>
             <button class="btn btn-excluir" onclick="excluirBarbeiro(${barb.id})">Excluir</button>
           </td>
         `;
@@ -455,7 +417,7 @@
       const senha = document.getElementById('usuario-senha').value;
 
       const metodo = id ? 'PUT' : 'POST';
-      const url = id ? `${API_URL}/admin/usuarios/${id}` : `${API_URL}/clientes`;
+      const url = id ? `${API_URL}/admin/usuarios/${id}` : `${API_URL}/clientes`; 
 
       const dados = { nome, email };
       
@@ -517,11 +479,12 @@
       const nome = document.getElementById('barbeiro-nome').value;
       const email = document.getElementById('barbeiro-email').value;
       const senha = document.getElementById('barbeiro-senha').value;
+      const urlImagem = document.getElementById('barbeiro-imagem').value;
 
       const metodo = id ? 'PUT' : 'POST';
       const url = id ? `${API_URL}/admin/barbeiros/${id}` : `${API_URL}/admin/barbeiros`;
 
-      const dados = { nome, email };
+      const dados = { nome, email, urlImagem };
       if (!id || senha) {
         dados.senha = senha;
       }
@@ -547,10 +510,11 @@
       }
     });
 
-    function preencherFormBarbeiro(id, nome, email) {
+    function preencherFormBarbeiro(id, nome, email, urlImagem) {
       document.getElementById('barbeiro-id').value = id;
       document.getElementById('barbeiro-nome').value = nome;
       document.getElementById('barbeiro-email').value = email;
+      document.getElementById('barbeiro-imagem').value = urlImagem;
       
       const campoSenha = document.getElementById('barbeiro-senha');
       campoSenha.value = '';
