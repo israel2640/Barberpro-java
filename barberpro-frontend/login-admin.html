@@ -170,9 +170,9 @@
       }
     }
 
-    
+
     setupPasswordToggle('login-senha', 'toggle-login-senha');
-    const API_URL = "https://barberpro-api-1o2y.onrender.com"; 
+    const API_URL = "https://barberpro-api-1o2y.onrender.com";
     const formLogin = document.getElementById('form-login-admin');
 
     formLogin.addEventListener('submit', async function (e) {
@@ -191,20 +191,25 @@
         if (response.ok) {
           const data = await response.json();
 
+          // 1. PRIMEIRO conferimos se ele é ADMIN
+          if (data.role === 'ADMIN') {
+            // Se for admin, salvamos tudo e deixamos entrar
+            localStorage.setItem('jwt_admin_token', data.token);
+            localStorage.setItem('userRole', data.role);
 
-          localStorage.setItem('jwt_admin_token', data.token);
-
-
-          localStorage.setItem('userRole', data.role);
-
-          alert('Login de administrador bem-sucedido!');
-          window.location.href = 'administrador.html';
+            alert('Login de administrador bem-sucedido!');
+            window.location.href = 'administrador.html';
+          } else {
+            // 2. Se for um usuário comum (USER), barramos aqui mesmo!
+            alert('Falha no login: Esta área é exclusiva para administradores.');
+            localStorage.clear(); // Limpa qualquer vestígio de login
+          }
         } else {
           alert('Falha no login. Verifique suas credenciais.');
         }
       } catch (error) {
-        console.error('Erro no login:', error);
-        alert('Erro de comunicação com o servidor.');
+        console.error('Erro na requisição:', error);
+        alert('Erro ao conectar com o servidor.');
       }
     });
   </script>
