@@ -26,7 +26,7 @@ public class Cliente implements UserDetails {
     private String senha;
 
     // --- 1. CAMPO ADICIONADO ---
-    private String roles;
+    private String roles = "USER";
 
     // --- GETTERS E SETTERS (Pode usar Lombok se preferir) ---
     public Long getId() {
