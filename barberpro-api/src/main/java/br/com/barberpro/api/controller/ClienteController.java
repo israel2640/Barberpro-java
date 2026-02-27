@@ -1,6 +1,7 @@
 package br.com.barberpro.api.controller;
 
 import br.com.barberpro.api.domain.Cliente;
+import br.com.barberpro.api.dto.DadosCadastroCliente;
 import br.com.barberpro.api.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder; // <-- IMPORTANTE
@@ -20,17 +21,17 @@ public class ClienteController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping
-    public Cliente criar(@RequestBody Cliente cliente) {
+    public Cliente criar(@RequestBody DadosCadastroCliente dados) {
         
+        var cliente = new Cliente();
+        cliente.setNome(dados.nome());
+        cliente.setEmail(dados.email());
+                
         cliente.setRoles("USER"); 
 
-        String senhaCriptografada = passwordEncoder.encode(cliente.getSenha());
+        String senhaCriptografada = passwordEncoder.encode(dados.senha());
         cliente.setSenha(senhaCriptografada);
 
-        
-        Cliente clienteSalvo = clienteRepository.save(cliente);
-
-        clienteSalvo.setSenha(null);
-        return clienteSalvo;
+        return clienteRepository.save(cliente);
     }
 }

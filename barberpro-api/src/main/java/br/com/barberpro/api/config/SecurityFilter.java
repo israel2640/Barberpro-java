@@ -23,7 +23,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private TokenService tokenService;
 
-    // 2. SUBSTITUA O ClienteRepository PELO AuthenticationService
+    
     @Autowired
     private AuthenticationService authenticationService;
 
@@ -37,10 +37,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             try {
                 var subject = tokenService.getSubject(tokenJWT);
 
-                // 3. USE O SERVIÇO PARA CARREGAR O USUÁRIO (SEJA ELE CLIENTE OU BARBEIRO)
+                
                 UserDetails user = authenticationService.loadUserByUsername(subject);
 
                 if (user != null) {
+                    System.out.println("DEBUG: Usuário " + user.getUsername() + " tentando acesso com as permissões: " + user.getAuthorities());
                     var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
