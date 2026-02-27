@@ -25,7 +25,7 @@ public class AutenticacaoBarbeiroController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody DadosAutenticacao dados) {
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @jakarta.validation.Valid DadosAutenticacao dados) {
         var token = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
         Authentication authentication = manager.authenticate(token);
 
@@ -35,6 +35,6 @@ public class AutenticacaoBarbeiroController {
 
         var tokenJWT = tokenService.gerarTokenBarbeiro(barbeiro);
 
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, barbeiro.getRoles()));
     }
 }

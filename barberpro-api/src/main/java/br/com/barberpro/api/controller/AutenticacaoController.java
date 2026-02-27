@@ -25,16 +25,16 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody DadosAutenticacao dados) {
-        var token = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
-        Authentication authentication = manager.authenticate(token);
+        public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @jakarta.validation.Valid DadosAutenticacao dados) {
+            var token = new UsernamePasswordAuthenticationToken(dados.email(), dados.senha());
+            Authentication authentication = manager.authenticate(token);
 
-        if (!(authentication.getPrincipal() instanceof Cliente cliente)) {
-            return ResponseEntity.status(401).build();
+            if (!(authentication.getPrincipal() instanceof Cliente cliente)) {
+                return ResponseEntity.status(401).build();
+            }
+
+            var tokenJWT = tokenService.gerarToken(cliente);
+
+            return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, cliente.getRoles()));
         }
-
-        var tokenJWT = tokenService.gerarToken(cliente);
-
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
-    }
 }
