@@ -334,6 +334,17 @@
       </div>
 
   <script>
+
+    (function verificarSeguranca() {
+        const token = localStorage.getItem('jwt_admin_token');
+        const role = localStorage.getItem('userRole');
+
+        if (!token || role !== 'ADMIN') {
+            alert("Acesso negado! Área restrita a administradores.");
+            window.location.href = "login-admin.html";
+        }
+    })();
+
     const API_URL = "https://barberpro-api-1o2y.onrender.com";
     const adminToken = localStorage.getItem('jwt_admin_token');
 
