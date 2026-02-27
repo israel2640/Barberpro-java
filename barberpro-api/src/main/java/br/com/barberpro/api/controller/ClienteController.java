@@ -21,15 +21,16 @@ public class ClienteController {
 
     @PostMapping
     public Cliente criar(@RequestBody Cliente cliente) {
+        
+        cliente.setRoles("USER"); 
 
         String senhaCriptografada = passwordEncoder.encode(cliente.getSenha());
-
         cliente.setSenha(senhaCriptografada);
 
+        
         Cliente clienteSalvo = clienteRepository.save(cliente);
 
         clienteSalvo.setSenha(null);
-
         return clienteSalvo;
     }
 }
